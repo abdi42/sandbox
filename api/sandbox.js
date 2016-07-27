@@ -56,6 +56,7 @@ var Sandbox = {
   },
   checkCode:function(req,res,callback){
     var intid = setInterval(function(){
+
       fs.access("temp/"+req.body.dirname+"/completed.txt", fs.F_OK, function(err) {
           if (err) {
               return;
