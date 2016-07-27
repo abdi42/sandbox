@@ -79,7 +79,7 @@ var Sandbox = {
           }
       });
 
-      fs.readFile("temp/"+req.body.dirname+"/src/compileError.txt","utf8", function(err,data) {
+      fs.readFile("temp/"+req.body.dirname+"/src/compileout.txt","utf8", function(err,data) {
           if (err) {
             return;
           }
