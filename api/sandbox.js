@@ -62,7 +62,15 @@ var Sandbox = {
           return;
         }
         else{
-          res.status(500).send(data);
+
+          exec("rm temp/"+req.body.dirname+"/src/compileout.txt",function(err,stdout,stderr){
+            if(err)
+              res.status(500).send(stderr)
+
+
+            res.status(500).send(data);
+          })
+
         }
     });
 
@@ -78,14 +86,18 @@ var Sandbox = {
               expectedOutput:req.body.output
             },function(err,result){
               clearInterval(intid);
-
               if(err){
                 res.status(500).send(err);
               }
-              else{
+
+              exec("rm temp/"+req.body.dirname+"/completed.txt",function(err,stdout,stderr){
+                if(err)
+                  res.status(500).send(stderr)
+
                 req.body.result = result;
                 res.json(req.body);
-              }
+              })
+
             })
 
           }

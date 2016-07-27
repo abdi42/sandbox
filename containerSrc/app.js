@@ -19,12 +19,13 @@ program.compile(function(err){
       data:""
     }
 
-    exec("rm tempDir/src/a.cpp",function(err,stdout,stderr){
+    exec("rm -r tempDir/src/output",function(err,stdout,stderr){
       if(err)
         console.log(stderr)
-
-      return;
-    })    
+      exec("mkdir tempDir/src/output",function(err,stdout,stderr){
+          return;
+      })
+    })
 
     if(!compileError){
       try {
