@@ -6,6 +6,7 @@ var jsonfile = require('jsonfile')
 var fs = require("fs");
 var filesystem = require("../lib/filesystem.js");
 var cuid = require("cuid");
+var eval = require("../lib/eval.js");
 
 var Sandbox = {
   create:function(req,res,callback){
@@ -53,7 +54,34 @@ var Sandbox = {
       }
     })
   },
-  remove:function(req,res,callback){
+  checkCode:function(req,res,callback){
+    var intid = setInterval(function(){
+      fs.access("temp/"+dirname+"/completed.txt", fs.F_OK, function(err) {
+          if (err) {
+              return;
+          }
+          else{
+
+            evalute(dirname,{
+              input:req.body.input,
+              expectedOutput:req.body.output
+            },function(err,result){
+              clearInterval(intid);
+
+              if(err){
+                res.status(500).send(err);
+              }
+              else{
+                res.json(result);
+              }
+            })
+
+          }
+      });
+
+    },1)
+  },
+  remove:function(err,req,res,callback){
     docker.removeContainer(req.body.containerId,function(err){
       if(err)
         return res.status(500).send(err);
@@ -111,6 +139,14 @@ function updateCode(dirname,req,callback){
     return callback(null);
   })
 
+}
+
+
+function evalute(dirname,data,callback){
+  eval.checkFiles("temp/"+dirname+"/src/output",data.expectedOutput,function(err,result){
+    if(err) return callback(err);
+    return callback(null,result);
+  })
 }
 
 
