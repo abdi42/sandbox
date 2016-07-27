@@ -8,7 +8,7 @@ program = new Program("tempDir/",config.lang);
 program.compile(function(err){
   if(err) console.error(err);
   program.execute(config.data.input,function(err){
-    if(err) fs.writeFile("compileout.txt",compileErr);
+    if(err) fs.writeFile("compileout.txt",err);
 
     var file = {
       path:"tempDir/completed.txt",
