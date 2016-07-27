@@ -20,14 +20,6 @@ program.compile(function(err){
       data:""
     }
 
-    exec("rm -r tempDir/src/output",function(err,stdout,stderr){
-      if(err)
-        console.log(stderr)
-      exec("mkdir tempDir/src/output",function(err,stdout,stderr){
-          return;
-      })
-    })
-
     if(!compileError){
       try {
         //Creating a file synchronously

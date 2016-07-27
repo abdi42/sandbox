@@ -169,7 +169,13 @@ function updateCode(dirname,req,callback){
 function evalute(dirname,data,callback){
   eval.checkFiles("temp/"+dirname+"/src/output",data.expectedOutput,function(err,result){
     if(err) return callback(err);
-    return callback(null,result);
+    exec("rm -r temp/"+dirname+"/src/output",function(err,stdout,stderr){
+      if(err)
+        return callback(stderr);
+      exec("mkdir temp/"+dirname+"/src/output",function(err,stdout,stderr){
+          return callback(null,result);
+      })
+    })
   })
 }
 
