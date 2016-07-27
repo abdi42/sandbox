@@ -40,15 +40,15 @@ var Sandbox = {
   runCode:function(req,res,callback){
     updateCode(req.body.dirname,req,function(err){
       if(err){
-        return res.status(500).send(err)
+        return callback(err);
       }
       else{
         docker.runCode(req.body.execId,function(err,exec){
           if(err){
-            return res.status(500).send(err);
+            return callback(err);
           }
           else{
-            return res.json(req.body);
+            return callback();
           }
         })
       }
