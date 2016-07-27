@@ -76,11 +76,13 @@ var Sandbox = {
         }
         else{
 
+          exec("rm temp/"+req.body.dirname+"/completed.txt")
+
           exec("rm temp/"+req.body.dirname+"/src/compileout.txt",function(err,stdout,stderr){
             if(err)
               res.status(500).send(stderr)
 
-
+            done = true;
             res.status(500).send(data);
           })
 
