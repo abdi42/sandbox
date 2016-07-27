@@ -62,6 +62,7 @@ var Sandbox = {
               return;
           }
           else{
+            console.log("completed")
             evalute(req.body.dirname,{
               input:req.body.input,
               expectedOutput:req.body.output
@@ -84,6 +85,7 @@ var Sandbox = {
             return;
           }
           else{
+            console.log("compileout")
             clearInterval(intid);
             res.status(500).send(data);
           }
