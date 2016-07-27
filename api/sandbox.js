@@ -46,6 +46,13 @@ var Sandbox = {
         return callback(err);
       }
       else{
+        var options = {
+          AttachStdout: true,
+          AttachStderr: true,
+          Tty: false,
+          Cmd: ['node' , 'app.js'];
+        };
+
         container.exec(options, function(err, exec) {
           if (err)
             return callback(err);
