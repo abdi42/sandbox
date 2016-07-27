@@ -19,6 +19,13 @@ program.compile(function(err){
       data:""
     }
 
+    exec("rm tempDir/src/a.cpp",function(err,stdout,stderr){
+      if(err)
+        console.log(stderr)
+
+      return;
+    })    
+
     if(!compileError){
       try {
         //Creating a file synchronously
@@ -28,8 +35,5 @@ program.compile(function(err){
       }
     }
 
-    exec("rm tempDir/src/a.cpp")
-
-    return;
   })
 })
