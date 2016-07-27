@@ -76,20 +76,17 @@ var Sandbox = {
         }
         else{
 
-          exec("rm temp/"+req.body.dirname+"/completed.txt")
-
           exec("rm temp/"+req.body.dirname+"/src/compileout.txt",function(err,stdout,stderr){
             if(err)
               res.status(500).send(stderr)
 
-            done = true;
             res.status(500).send(data);
           })
 
         }
     });
 
-    var intid = setInterval(function(){
+
       fs.access("temp/"+req.body.dirname+"/completed.txt", fs.F_OK, function(err) {
           if (err) {
               return;
@@ -100,7 +97,7 @@ var Sandbox = {
               input:req.body.input,
               expectedOutput:req.body.output
             },function(err,result){
-              clearInterval(intid);
+      
               if(err){
                 res.status(500).send(err);
               }
@@ -117,7 +114,7 @@ var Sandbox = {
 
           }
       });
-    },1)
+
   },
   remove:function(err,req,res,callback){
     docker.removeContainer(req.body.containerId,function(err){
