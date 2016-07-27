@@ -46,18 +46,12 @@ var Sandbox = {
         return callback(err);
       }
       else{
-        var options = {
-          AttachStdout: true,
-          AttachStderr: true,
-          Tty: false,
-          Cmd: ['node' , 'app.js']
-        };
 
-        container.exec(options, function(err, exec) {
+        docker.createExec(req.body.containerId, function(err, execId) {
           if (err)
             return callback(err);
           else{
-            docker.runCode(exec.id,function(err,exec){
+            docker.runCode(execId,function(err,exec){
               console.log("Running code")
               if(err){
                 return callback(err);
@@ -68,6 +62,7 @@ var Sandbox = {
             })
           }
         });
+
       }
     })
   },
