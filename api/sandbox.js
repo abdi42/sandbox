@@ -84,6 +84,7 @@ var Sandbox = {
             return;
           }
           else{
+            clearInterval(intid);
             res.status(500).send(data);
           }
       });
