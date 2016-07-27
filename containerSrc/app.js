@@ -18,7 +18,7 @@ program.compile(function(err){
       data:""
     }
 
-    if(!compileErr){
+    if(!compileError){
       try {
         //Creating a file synchronously
         fs.writeFileSync(file.path, file.data, 'utf8');
@@ -26,7 +26,7 @@ program.compile(function(err){
         return;
       }
     }
-    
+
     return;
   })
 })
