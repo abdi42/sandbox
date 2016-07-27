@@ -15,6 +15,7 @@ exports.createTemp = function(config,callback){
       path:"temp/"+config.dirname+"/src/input"
     }
   ]
+
   var files = [
     {
       path:"temp/"+config.dirname+"/src/"+config.lang.fileName+config.lang.compileExt,
