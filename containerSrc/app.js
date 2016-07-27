@@ -6,9 +6,9 @@ var fs = require("fs");
 
 program = new Program("tempDir/",config.lang);
 program.compile(function(err){
-  if(err) console.error(err);
+  if(err) fs.writeFile("compileout.txt",err);
   program.execute(config.data.input,function(err){
-    if(err) fs.writeFile("compileout.txt",err);
+    if(err) console.error(err);
 
     var file = {
       path:"tempDir/completed.txt",
