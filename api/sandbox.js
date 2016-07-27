@@ -78,6 +78,15 @@ var Sandbox = {
           }
       });
 
+      fs.readFile("temp/"+req.body.dirname+"/src/compileError.txt","utf8", function(err,data) {
+          if (err) {
+            return;
+          }
+          else{
+            res.status(500).send(data);
+          }
+      });
+
     },1)
   },
   remove:function(err,req,res,callback){
