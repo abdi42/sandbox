@@ -57,8 +57,16 @@ var Sandbox = {
   checkCode:function(req,res,callback){
     done = false;
 
-    var intiA = setInterval(function(){
+    fs.readFile("temp/"+req.body.dirname+"/src/compileout.txt","utf8", function(err,data) {
+        if (err) {
+          return;
+        }
+        else{
+          res.status(500).send(data);
+        }
+    });
 
+    var intid = setInterval(function(){
       fs.access("temp/"+req.body.dirname+"/completed.txt", fs.F_OK, function(err) {
           if (err) {
               return;
@@ -69,7 +77,7 @@ var Sandbox = {
               input:req.body.input,
               expectedOutput:req.body.output
             },function(err,result){
-              done = true;
+              clearInterval(intid);
 
               if(err){
                 res.status(500).send(err);
@@ -81,32 +89,6 @@ var Sandbox = {
 
           }
       });
-
-      if(done){
-        console.log("clearing interval")
-        clearInterval(intiA);
-      }
-
-    },1)
-
-    var intiB = setInterval(function(){
-
-      fs.readFile("temp/"+req.body.dirname+"/src/compileout.txt","utf8", function(err,data) {
-          if (err) {
-            return;
-          }
-          else{
-            console.log("compileout")
-            done = true;
-            res.status(500).send(data);
-          }
-      });
-
-      if(done){
-        console.log("clearing interval")
-        clearInterval(intiB);
-      }
-
     },1)
   },
   remove:function(err,req,res,callback){
