@@ -9,6 +9,7 @@ program.compile(function(err){
   if(err) console.error(err);
   program.execute(config.data.input,function(err){
     if(err) return console.log(err);
+    
     var file = {
       path:"tempDir/completed.txt",
       data:""
