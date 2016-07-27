@@ -79,27 +79,6 @@ var Sandbox = {
       });
 
     },1)
-
-  },
-  updateCode:function(req,res,callback){
-    var config = {
-      source:req.body.source,
-      lang:langs[req.body.lang],
-      dirname:req.body.dirname,
-    }
-
-    var files = [
-      {
-        path:"temp/"+config.dirname+"/src/"+config.lang.fileName+config.lang.compileExt,
-        data:config.source
-      }
-    ]
-
-    filesystem.createFile(files,function(err){
-      if(err) return callback(err)
-      return callback(null);
-    })
-
   },
   remove:function(err,req,res,callback){
     docker.removeContainer(req.body.containerId,function(err){
@@ -140,6 +119,26 @@ function createTemps(dirname,req,callback){
 }
 
 
+function updateCode(dirname,req,callback){
+  var config = {
+    source:req.body.source,
+    lang:langs[req.body.lang],
+    dirname:dirname,
+  }
+
+  var files = [
+    {
+      path:"temp/"+config.dirname+"/src/"+config.lang.fileName+config.lang.compileExt,
+      data:config.source
+    }
+  ]
+
+  filesystem.createFile(files,function(err){
+    if(err) return callback(err)
+    return callback(null);
+  })
+
+}
 
 
 function evalute(dirname,data,callback){
