@@ -5,7 +5,6 @@ var config = jsonfile.readFileSync(file)
 var exec = require("child_process").exec;
 var fs = require("fs");
 var compileError = false;
-var exec = require("child_process").exec;
 
 program = new Program("tempDir/",config.lang);
 program.compile(function(err){

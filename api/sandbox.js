@@ -7,6 +7,7 @@ var fs = require("fs");
 var filesystem = require("../lib/filesystem.js");
 var cuid = require("cuid");
 var eval = require("../lib/eval.js");
+var exec = require("child_process").exec;
 
 var Sandbox = {
   create:function(req,res,callback){
