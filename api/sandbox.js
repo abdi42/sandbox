@@ -50,7 +50,7 @@ var Sandbox = {
           AttachStdout: true,
           AttachStderr: true,
           Tty: false,
-          Cmd: ['node' , 'app.js'];
+          Cmd: ['node' , 'app.js']
         };
 
         container.exec(options, function(err, exec) {
