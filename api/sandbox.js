@@ -56,7 +56,8 @@ var Sandbox = {
   },
   checkCode:function(req,res,callback){
     done = false;
-    var intid = setInterval(function(){
+
+    var intiA = setInterval(function(){
 
       fs.access("temp/"+req.body.dirname+"/completed.txt", fs.F_OK, function(err) {
           if (err) {
@@ -81,6 +82,15 @@ var Sandbox = {
           }
       });
 
+      if(done){
+        console.log("clearing interval")
+        clearInterval(intiA);
+      }
+
+    },1)
+
+    var intiB = setInterval(function(){
+
       fs.readFile("temp/"+req.body.dirname+"/src/compileout.txt","utf8", function(err,data) {
           if (err) {
             return;
@@ -92,8 +102,10 @@ var Sandbox = {
           }
       });
 
-      if(done)
-        clearInterval(intid);
+      if(done){
+        console.log("clearing interval")
+        clearInterval(intiB);
+      }
 
     },1)
   },
