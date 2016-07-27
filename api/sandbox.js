@@ -40,26 +40,34 @@ var Sandbox = {
   },
   runCode:function(req,res,callback){
     updateCode(req.body.dirname,req,function(err){
+      var container = docker.getContainer(req.body.containerId);
+
       if(err){
         return callback(err);
       }
       else{
-        docker.runCode(req.body.execId,function(err,exec){
-          console.log("Running code")
-          if(err){
+        container.exec(options, function(err, exec) {
+          if (err)
             return callback(err);
-          }
           else{
-            return callback();
+            docker.runCode(exec.id,function(err,exec){
+              console.log("Running code")
+              if(err){
+                return callback(err);
+              }
+              else{
+                return callback();
+              }
+            })
           }
-        })
+        });
       }
     })
   },
   checkCode:function(req,res,callback){
     done = false;
     console.log("Checking code");
-    
+
     fs.readFile("temp/"+req.body.dirname+"/src/compileout.txt","utf8", function(err,data) {
         if (err) {
           return;
