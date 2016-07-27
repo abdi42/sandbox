@@ -45,6 +45,7 @@ var Sandbox = {
       }
       else{
         docker.runCode(req.body.execId,function(err,exec){
+          console.log("Running code")
           if(err){
             return callback(err);
           }
@@ -57,7 +58,8 @@ var Sandbox = {
   },
   checkCode:function(req,res,callback){
     done = false;
-
+    console.log("Checking code");
+    
     fs.readFile("temp/"+req.body.dirname+"/src/compileout.txt","utf8", function(err,data) {
         if (err) {
           return;
@@ -169,7 +171,7 @@ function updateCode(dirname,req,callback){
 function evalute(dirname,data,callback){
   eval.checkFiles("temp/"+dirname+"/src/output",data.expectedOutput,function(err,result){
     if(err) return callback(err);
-    
+
     return callback(null,result);
   })
 }
