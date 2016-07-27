@@ -55,6 +55,7 @@ var Sandbox = {
     })
   },
   checkCode:function(req,res,callback){
+    done = false;
     var intid = setInterval(function(){
 
       fs.access("temp/"+req.body.dirname+"/completed.txt", fs.F_OK, function(err) {
@@ -67,7 +68,7 @@ var Sandbox = {
               input:req.body.input,
               expectedOutput:req.body.output
             },function(err,result){
-              clearInterval(intid);
+              done = true;
 
               if(err){
                 res.status(500).send(err);
@@ -86,10 +87,13 @@ var Sandbox = {
           }
           else{
             console.log("compileout")
-            clearInterval(intid);
+            done = true;
             res.status(500).send(data);
           }
       });
+
+      if(done)
+        clearInterval(intid);
 
     },1)
   },
