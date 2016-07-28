@@ -25,9 +25,7 @@ exports.createTemp = function(config,callback){
 
   for(var i=0;i<config.data.input.length;i++){
     var inputStr = config.data.input[i].join('\n');
-    console.log(inputStr)    
 
-    
     files.push({
       path:"temp/"+config.dirname+"/src/input/"+i+".txt",
       data:inputStr
