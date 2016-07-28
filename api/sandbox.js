@@ -130,6 +130,11 @@ var Sandbox = {
 
 
 function createTemps(dirname,req,callback){
+  var inputStr = req.body.split(',');
+  inputStr = inputStr.join('\n');
+  
+  console.log(inputStr)
+  
   var config = {
     source:req.body.source,
     lang:langs[req.body.lang],
