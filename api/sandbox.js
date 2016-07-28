@@ -130,7 +130,7 @@ var Sandbox = {
 
 
 function createTemps(dirname,req,callback){
-  var inputStr = req.body.split(',');
+  var inputStr = req.body.input.split(',');
   inputStr = inputStr.join('\n');
   
   console.log(inputStr)
