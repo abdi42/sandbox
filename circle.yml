@@ -1,0 +1,12 @@
+machine:
+  node:
+    version: 4.4.3
+
+dependencies:
+  pre:
+    - npm install -g mocha
+    - sudo apt-get update -y
+    - sudo apt-get install mono-vbnc -y
+    - sudo ln -s /usr/lib/mono/4.0/Microsoft.VisualBasic.dll /usr/lib/mono/4.5/Microsoft.VisualBasic.dll
+    - sudo apt-get install default-jdk -y
+    - sudo apt-get install gcc -y

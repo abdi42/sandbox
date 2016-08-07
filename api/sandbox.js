@@ -1,158 +1,149 @@
-var Docker = require("../lib/docker.js");
-var docker = new Docker("coderunner")
-var fsController = require("../controller/filesystem.js");
-var langs = require("../lib/langs.js");
-var jsonfile = require('jsonfile')
-var fs = require("fs");
+var dockerhttp = require("../lib/dockerhttp.js");
 var filesystem = require("../lib/filesystem.js");
+var jsonfile = require("jsonfile");
+var langs = require("../lib/langs.js");
 var cuid = require("cuid");
-var eval = require("../lib/eval.js");
-var exec = require("child_process").exec;
 
 var Sandbox = {
-  create:function(req,res,callback){
-    var dirname = cuid();
+    create: function(req, res, callback) {
+        req.body.dirname = cuid();
 
-    createTemps(dirname,req,function(err){
-      if(err){
-        return callback(err)
-      }
-      docker.createContainer(function(err,container){
-        if(err){
-          return callback(err);
-        }
-        else{
-          docker.startContainer(container,dirname,['node' , 'app.js'],function(err,execId){
-            if(err){
-              return callback(err);
-            }
-            else{
-              req.body.dirname = dirname;
-              req.body.containerId = container.id;
-              req.body.execId = execId;
-              return callback();
-            }
-          })
-        }
-      })
-    })
+        createTemps(req.body.dirname, req, function(err) {
+            if (err) return callback(err)
 
-  },
-  runCode:function(req,res,callback){
-    updateCode(req.body.dirname,req,function(err){
-      var container = docker.getContainer(req.body.containerId);
+            createContainer(req.body.dirname, function(err, containerId) {
+                if (err) return callback(err);
 
-      if(err){
-        return callback(err);
-      }
-      else{
+                req.body.containerId = containerId;
 
-        docker.createExec(req.body.containerId, function(err, execId) {
-          if (err)
-            return callback(err);
-          else{
-            docker.runCode(execId,function(err,exec){
-              console.log("Running code")
-              if(err){
-                return callback(err);
-              }
-              else{
                 return callback();
-              }
             })
-          }
-        });
-
-      }
-    })
-  },
-  checkCode:function(req,res,callback){
-    done = false;
-    console.log("Checking code");
-
-    fs.readFile("temp/"+req.body.dirname+"/src/compileout.txt","utf8", function(err,data) {
-        if (err) {
-          return;
-        }
-        else{
-
-          exec("rm temp/"+req.body.dirname+"/src/compileout.txt",function(err,stdout,stderr){
-            if(err)
-              res.status(500).send(stderr)
-
-            res.status(500).send(data);
-          })
-
-        }
-    });
-
-
-      fs.access("temp/"+req.body.dirname+"/completed.txt", fs.F_OK, function(err) {
-          if (err) {
-              return;
-          }
-          else{
-            console.log("completed")
-            evalute(req.body.dirname,{
-              input:req.body.input,
-              expectedOutput:req.body.output
-            },function(err,result){
-      
-              if(err){
-                res.status(500).send(err);
-              }
-
-              exec("rm temp/"+req.body.dirname+"/completed.txt",function(err,stdout,stderr){
-                if(err)
-                  res.status(500).send(stderr)
-
-                req.body.result = result;
-                res.json(req.body);
-              })
-
-            })
-
-          }
-      });
-
-  },
-  remove:function(err,req,res,callback){
-    docker.removeContainer(req.body.containerId,function(err){
-      if(err)
-        return res.status(500).send(err);
-      else
-        return res.send({
-          containerId:req.body.containerId,
         })
-    })
-  }
+    },
+    runCode:function(req,res,callback){
+        updateCode(req.body.dirname,req,function(err){
+            if(err) return callback(err)
+
+            containerExec(req.body.containerId,function(err){
+                if(err) return callback(err)
+
+                return callback();
+            })
+        })
+    },
+    remove:function(req,res,callback){
+        dockerhttp.post("/containers/"+req.body.containerId+"/stop",{},function(err){
+            if(err) return callback(err)
+
+            dockerhttp.delete("/containers/"+req.body.containerId+"?v=1",{},function(err){
+                if(err) return callback(err)
+
+                return callback();
+            })
+        })
+    }
 }
 
 
-function createTemps(dirname,req,callback){
-
-  var config = {
-    source:req.body.source,
-    lang:langs[req.body.lang],
-    dirname:dirname,
-    data:{
-      input:req.body.input,
-      expectedOutput:req.body.output
+function createContainer(dirname, callback) {
+    var containerOpts = {
+        AttachStdout: true,
+        AttachStderr: true,
+        Image: "coderunner",
+        OpenStdin: true,
+        Volumes: {
+            "/tempDir": {}
+        },
+        Cmd: ['/bin/bash']
     }
-  }
 
-  fsController.createTemp(config,function(err){
-    if(err){
-      return callback(err)
-    }
-    else{
-      var file = "temp/"+dirname+"/data.json";
-      config.source = "";
-      jsonfile.writeFileSync(file, config, {spaces: 2})
+    dockerhttp.post("/containers/create", containerOpts, function(err, body) {
+        if (err) return callback(err)
 
-      return callback(null);
+        var containerId = body.Id;
+
+        dockerhttp.post("/containers/" + containerId + "/start", {
+            Binds: ["/root/sandbox/temp/" + dirname + ":/codetree/tempDir:rw"]
+        }, function(err, body) {
+            if (err) return callback(err)
+
+            return callback(null, containerId);
+        })
+    })
+}
+
+function containerExec(containerId,callback){
+    var execOpts = {
+      AttachStdout: true,
+      AttachStderr: true,
+      Tty: false,
+      Cmd: ['node' , 'app.js']
     }
-  })
+
+    dockerhttp.post("/containers/"+containerId+"/exec",execOpts,function(err,body){
+        dockerhttp.post("/exec/"+body.Id+"/start",{ Detach: false,Tty: false },function(err){
+            if(err) return callback(err)
+
+            return callback(null);
+        })
+    })
+}
+
+function createTemps(dirname, req, callback) {
+
+    var config = {
+        source: req.body.source,
+        lang: langs[req.body.lang],
+        dirname: dirname,
+        data: {
+            input: req.body.input,
+            expectedOutput: req.body.output
+        }
+    }
+
+    var folders = [{
+        path: "temp/" + config.dirname,
+    }, {
+        path: "temp/" + config.dirname + "/src"
+    }, {
+        path: "temp/" + config.dirname + "/src/output"
+    }, {
+        path: "temp/" + config.dirname + "/src/input"
+    }]
+
+    var files = [{
+        path: "temp/" + config.dirname + "/src/" + config.lang.fileName + config.lang.compileExt,
+        data: config.source
+    }]
+
+    for (var i = 0; i < config.data.input.length; i++) {
+        var inputStr = config.data.input[i].join('\n');
+
+        files.push({
+            path: "temp/" + config.dirname + "/src/input/" + i + ".txt",
+            data: inputStr
+        })
+    }
+
+    filesystem.createDirectory(folders, function(err) {
+        if (err) return callback(err);
+        filesystem.createFile(files, function(err) {
+            if (err) return callback(err)
+
+            var file = "temp/" + dirname + "/data.json";
+            config.source = "";
+
+            jsonfile.writeFileSync(file, config, {
+                spaces: 2
+            })
+
+            return callback(null);
+
+        })
+    })
+
+
+
 }
 
 
@@ -177,15 +168,31 @@ function updateCode(dirname,req,callback){
 
 }
 
+var req = {
+    body: {
+        input: [
+            [0, 1],
+            [1, 1]
+        ],
+        output: [
+            [1],
+            [2]
+        ],
+        source: "n/a",
+        lang: "VB"
+    }
+};
 
-function evalute(dirname,data,callback){
-  eval.checkFiles("temp/"+dirname+"/src/output",data.expectedOutput,function(err,result){
-    if(err) return callback(err);
+Sandbox.create(req, {}, function(err) {
+    if (err)
+        console.error(err)
 
-    return callback(null,result);
-  })
-}
+    Sandbox.runCode(req,{},function(err){
+        if(err)
+            console.error(err)
 
 
+            console.log("DONE")
 
-module.exports = Sandbox;
+    })
+})

@@ -13,5 +13,5 @@ RUN mkdir codetree
 WORKDIR codetree
 ADD package.json package.json
 RUN npm install
-ADD ./containerSrc .
+ADD ./container_source .
 ADD ./lib/program.js .
