@@ -8,6 +8,7 @@ RUN apt-get install gcc -y
 
 #Install node deps and move source
 ENV topDir /codetree
+ENV TERM xterm
 RUN echo $topDir
 RUN mkdir codetree
 WORKDIR codetree

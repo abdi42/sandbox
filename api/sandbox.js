@@ -3,6 +3,9 @@ var filesystem = require("../lib/filesystem.js");
 var jsonfile = require("jsonfile");
 var langs = require("../lib/langs.js");
 var cuid = require("cuid");
+var fs = require("fs");
+var eval = require("../lib/eval.js")
+var exec = require("child_process").exec;
 
 var Sandbox = {
     create: function(req, res, callback) {
@@ -31,7 +34,7 @@ var Sandbox = {
             })
         })
     },
-    checkCode:function(){
+    checkCode:function(req,res,callback){
       done = false;
       console.log("Checking code");
 
@@ -195,6 +198,13 @@ function createTemps(dirname, req, callback) {
 
 }
 
+function evalute(dirname,data,callback){
+  eval.checkFiles("temp/"+dirname+"/src/output",data.expectedOutput,function(err,result){
+    if(err) return callback(err);
+
+    return callback(null,result);
+  })
+}
 
 function updateCode(dirname,req,callback){
   var config = {
@@ -217,31 +227,4 @@ function updateCode(dirname,req,callback){
 
 }
 
-var req = {
-    body: {
-        input: [
-            [0, 1],
-            [1, 1]
-        ],
-        output: [
-            [1],
-            [2]
-        ],
-        source: "n/a",
-        lang: "VB"
-    }
-};
-
-Sandbox.create(req, {}, function(err) {
-    if (err)
-        console.error(err)
-
-    Sandbox.runCode(req,{},function(err){
-        if(err)
-            console.error(err)
-
-
-            console.log("DONE")
-
-    })
-})
+module.exports = Sandbox;
