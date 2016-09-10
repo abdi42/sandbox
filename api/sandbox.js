@@ -119,6 +119,7 @@ function createContainer(dirname, callback) {
         dockerhttp.post("/containers/" + containerId + "/start", {
             Binds: ["/home/abdullahimahamed0987/sandbox/temp/" + dirname + ":/codetree/tempDir:rw"]
         }, function(err, body) {
+            console.log(err,body);
             if (err) return callback(err)
 
             return callback(null, containerId);
