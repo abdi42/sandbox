@@ -105,7 +105,7 @@ function createContainer(dirname, callback) {
         AttachStderr: true,
         Image: "coderunner",
         OpenStdin: true,
-        HostConfig{
+        HostConfig:{
           Binds: ["~/sandbox/temp/" + dirname + ":/codetree/tempDir:rw"]
         },
         Volumes: {
