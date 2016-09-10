@@ -105,9 +105,6 @@ function createContainer(dirname, callback) {
         AttachStderr: true,
         Image: "coderunner",
         OpenStdin: true,
-        HostConfig:{
-          Binds: ["~/sandbox/temp/" + dirname + ":/codetree/tempDir:rw"]
-        },
         Volumes: {
             "/tempDir": {}
         },
@@ -119,6 +116,7 @@ function createContainer(dirname, callback) {
 
         var containerId = body.Id;
         console.log("creating container")
+        console.log("~/sandbox/temp/" + dirname)
 
         dockerhttp.post("/containers/" + containerId + "/start", {
             Binds: ["~/sandbox/temp/" + dirname + ":/codetree/tempDir:rw"]
