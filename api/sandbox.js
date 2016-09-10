@@ -9,6 +9,7 @@ var exec = require("child_process").exec;
 
 var Sandbox = {
     create: function(req, res, callback) {
+        console.log("Creating sandbox")
         req.body.dirname = cuid();
 
         createTemps(req.body.dirname, req, function(err) {
@@ -24,6 +25,7 @@ var Sandbox = {
         })
     },
     runCode:function(req,res,callback){
+        console.log("Running code")
         updateCode(req.body.dirname,req,function(err){
             if(err) return callback(err)
 
