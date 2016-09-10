@@ -109,7 +109,7 @@ function createContainer(dirname, callback) {
             "/codetree/tempDir": {}
         },
         HostConfig: {
-          Binds: ["/tmp:/tmp"],
+          ["/home/abdullahimahamed0987/sandbox/temp/" + dirname + ":/codetree/tempDir:rw"],
         },
         Cmd: ['/bin/bash']
     }
@@ -119,8 +119,7 @@ function createContainer(dirname, callback) {
 
         var containerId = body.Id;
 
-        dockerhttp.post("/containers/" + containerId + "/start", {
-        }, function(err, body) {
+        dockerhttp.post("/containers/" + containerId + "/start", {}, function(err, body) {
             console.log(err,body);
             if (err) return callback(err)
 
