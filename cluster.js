@@ -1,9 +1,10 @@
 var cluster = require('cluster');
 
 
-console.log("Starting cluster")
 
 if (cluster.isMaster) {
+  console.log("Starting cluster")
+  
   // Count the machine's CPUs
   var cpuCount = require('os').cpus().length;
   console.log("CPU Count = " + cpuCount);
