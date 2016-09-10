@@ -106,28 +106,25 @@ function createContainer(dirname, callback) {
         Image: "coderunner",
         OpenStdin: true,
         Volumes: {
-            "/codetree/tempDir": {}
-        },
-        HostConfig:{
-          Binds: ["/home/abdullahimahamed0987/sandbox/temp/" + dirname + ":/codetree/tempDir:rw"]
+            "/tempDir": {}
         },
         Cmd: ['/bin/bash']
     }
 
     dockerhttp.post("/containers/create", containerOpts, function(err, body) {
         if (err) return callback(err)
-        console.log(err,body)
+
         var containerId = body.Id;
-        console.log("creating container")
 
         dockerhttp.post("/containers/" + containerId + "/start", {
-            Binds: ["/home/abdullahimahamed0987/sandbox/temp/" + dirname + ":/codetree/tempDir:rw"]
+            Binds: ["/root/sandbox/temp/" + dirname + ":/codetree/tempDir:rw"]
         }, function(err, body) {
             if (err) return callback(err)
 
             return callback(null, containerId);
         })
     })
+    
 }
 
 function containerExec(containerId,callback){
