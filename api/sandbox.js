@@ -106,7 +106,7 @@ function createContainer(dirname, callback) {
         Image: "coderunner",
         OpenStdin: true,
         Volumes: {
-            "/tempDir": {}
+            "/mnt" => {}
         },
         Cmd: ['/bin/bash']
     }
