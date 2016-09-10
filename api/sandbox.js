@@ -116,7 +116,7 @@ function createContainer(dirname, callback) {
 
     dockerhttp.post("/containers/create", containerOpts, function(err, body) {
         if (err) return callback(err)
-
+        console.log(err,body)
         var containerId = body.Id;
         console.log("creating container")
 
