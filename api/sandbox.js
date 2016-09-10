@@ -108,8 +108,8 @@ function createContainer(dirname, callback) {
         Volumes: {
             "/codetree/tempDir": {}
         },
-        HostConfig: {
-          ["/home/abdullahimahamed0987/sandbox/temp/" + dirname + ":/codetree/tempDir:rw"]
+        HostConfig:{
+          Binds:["/home/abdullahimahamed0987/sandbox/temp/" + dirname + ":/codetree/tempDir:rw"]
         },
         Cmd: ['/bin/bash']
     }
