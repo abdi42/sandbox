@@ -106,7 +106,7 @@ function createContainer(dirname, callback) {
         Image: "coderunner",
         OpenStdin: true,
         Volumes: {
-            "/mnt" => {}
+            "/tempDir": {}
         },
         Cmd: ['/bin/bash']
     }
@@ -116,7 +116,6 @@ function createContainer(dirname, callback) {
 
         var containerId = body.Id;
         console.log("creating container")
-        console.log("~/sandbox/temp/" + dirname)
 
         dockerhttp.post("/containers/" + containerId + "/start", {
             Binds: ["~/sandbox/temp/" + dirname + ":/codetree/tempDir:rw"]
