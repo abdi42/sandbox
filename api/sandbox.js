@@ -9,7 +9,6 @@ var exec = require("child_process").exec;
 
 var Sandbox = {
     create: function(req, res, callback) {
-        console.log("Creating sandbox")
         req.body.dirname = cuid();
 
         createTemps(req.body.dirname, req, function(err) {
@@ -25,7 +24,6 @@ var Sandbox = {
         })
     },
     runCode:function(req,res,callback){
-        console.log("Running code")
         updateCode(req.body.dirname,req,function(err){
             if(err) return callback(err)
 
@@ -38,7 +36,6 @@ var Sandbox = {
     },
     checkCode:function(req,res,callback){
       done = false;
-      console.log("Checking code");
 
       fs.readFile("temp/"+req.body.dirname+"/src/compileout.txt","utf8", function(err,data) {
           if (err) {
@@ -62,7 +59,6 @@ var Sandbox = {
                 return;
             }
             else{
-              console.log("completed")
               evalute(req.body.dirname,{
                 input:req.body.input,
                 expectedOutput:req.body.output
@@ -120,7 +116,6 @@ function createContainer(dirname, callback) {
         var containerId = body.Id;
 
         dockerhttp.post("/containers/" + containerId + "/start", {}, function(err, body) {
-            console.log(err,body);
             if (err) return callback(err)
 
             return callback(null, containerId);
