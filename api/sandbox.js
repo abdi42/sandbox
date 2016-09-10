@@ -109,7 +109,7 @@ function createContainer(dirname, callback) {
             "/codetree/tempDir": {}
         },
         HostConfig: {
-          ["/home/abdullahimahamed0987/sandbox/temp/" + dirname + ":/codetree/tempDir:rw"],
+          ["/home/abdullahimahamed0987/sandbox/temp/" + dirname + ":/codetree/tempDir:rw"]
         },
         Cmd: ['/bin/bash']
     }
