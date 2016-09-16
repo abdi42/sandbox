@@ -54,32 +54,33 @@ var Sandbox = {
       });
 
 
-        fs.access("temp/"+req.body.dirname+"/completed.txt", fs.F_OK, function(err) {
-            if (err) {
-                return;
-            }
-            else{
-              evalute(req.body.dirname,{
-                input:req.body.input,
-                expectedOutput:req.body.output
-              },function(err,result){
+      fs.access("temp/"+req.body.dirname+"/completed.txt", fs.F_OK, function(err) {
+          if (err) {
+              return;
+          }
+          else{
+            evalute(req.body.dirname,{
+              input:req.body.input,
+              expectedOutput:req.body.output
+            },function(err,result){
 
-                if(err){
-                  res.status(500).send(err);
-                }
+              if(err){
+                res.status(500).send(err);
+              }
 
-                exec("rm temp/"+req.body.dirname+"/completed.txt",function(err,stdout,stderr){
-                  if(err)
-                    res.status(500).send(stderr)
+              exec("rm temp/"+req.body.dirname+"/completed.txt",function(err,stdout,stderr){
+                if(err)
+                  res.status(500).send(stderr)
 
-                  req.body.result = result;
-                  res.json(req.body);
-                })
-
+                req.body.result = result;
+                res.json(req.body);
               })
 
-            }
-        });
+            })
+
+          }
+      });
+
     },
     remove:function(req,res,callback){
         dockerhttp.post("/containers/"+req.body.containerId+"/stop",{},function(err){
@@ -104,6 +105,7 @@ function createContainer(dirname, callback) {
         Volumes: {
             "/codetree/tempDir": {}
         },
+        NetworkDisabled:true,
         HostConfig:{
           Binds:["/home/abdullahimahamed0987/sandbox/temp/" + dirname + ":/codetree/tempDir:rw"]
         },

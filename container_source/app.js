@@ -10,7 +10,7 @@ console.time("runProgram");
 program = new Program("tempDir/",config.lang);
 program.compile(function(err){
   if(err){
-    fs.writeFile("compileout.txt",err);
+    fs.writeFile("tempDir/compileout.txt",err);
     compileError = true;
   }
   program.execute(config.data.input,function(err){
