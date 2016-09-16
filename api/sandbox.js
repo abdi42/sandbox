@@ -37,13 +37,13 @@ var Sandbox = {
     checkCode:function(req,res,callback){
       done = false;
 
-      fs.readFile("temp/"+req.body.dirname+"/src/compileout.txt","utf8", function(err,data) {
+      fs.readFile("temp/"+req.body.dirname+"/compileout.txt","utf8", function(err,data) {
           if (err) {
             return;
           }
           else{
 
-            exec("rm temp/"+req.body.dirname+"/src/compileout.txt",function(err,stdout,stderr){
+            exec("rm temp/"+req.body.dirname+"/compileout.txt",function(err,stdout,stderr){
               if(err)
                 res.status(500).send(stderr)
 
