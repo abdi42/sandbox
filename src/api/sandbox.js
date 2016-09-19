@@ -107,7 +107,7 @@ function createContainer(dirname, callback) {
         },
         NetworkDisabled:true,
         HostConfig:{
-          Binds:["/home/abdullahimahamed0987/sandbox/temp/" + dirname + ":/codetree/tempDir:rw"]
+          Binds:["/home/abdullahimahamed0987/sandbox/src/temp/" + dirname + ":/codetree/tempDir:rw"]
         },
         Cmd: ['/bin/bash']
     }
