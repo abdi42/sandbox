@@ -54,7 +54,6 @@ describe("DockerHttp",function(){
 
 
   it("should start a docker container",function(){
-    console.log(container);
     dockerhttp.post("/containers/" + container.Id + "/start", {}, function(err, body) {
         if (err) throw new Error(err)
         done();
