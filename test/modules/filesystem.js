@@ -1,5 +1,5 @@
 var should = require("should")
-var filesystem = require("../../lib/filesystem.js");
+var filesystem = require("../../src/lib/filesystem.js");
 var exec = require('child_process').exec;
 var fs = require("fs");
 

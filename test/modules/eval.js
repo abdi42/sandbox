@@ -1,4 +1,4 @@
-var eval = require("../../lib/eval.js");
+var eval = require("../../src/lib/eval.js");
 var exec = require("child_process").exec;
 
 describe("Evalute",function(){

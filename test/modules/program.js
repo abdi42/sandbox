@@ -1,10 +1,9 @@
-
 var should = require("should");
 var exec = require("child_process").exec;
 var fs = require("fs")
-var filesystem = require("../../lib/filesystem.js");
-var Program = require("../../lib/program.js");
-var langs = require("../../lib/langs.js");
+var filesystem = require("../../src/lib/filesystem.js");
+var Program = require("../../src/lib/program.js");
+var langs = require("../../src/lib/langs.js");
 var langsArr = ["VB","JAVA","C++"]
 var sources = [
   "Imports System\n\nPublic Module Module1\n\tPublic Sub Main()\n\t\tdim str as String\n\t\tstr = Console.ReadLine()\n\n\t\tConsole.Write(str)\n\n\tEnd Sub\n\nEnd Module\n",

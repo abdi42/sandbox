@@ -8,3 +8,4 @@ console.log("Running test sandbox in " + langs[process.env.CIRCLE_NODE_INDEX]);
 require("./modules/filesystem.js");
 require("./modules/program.js");
 require("./modules/eval.js");
+require("./modules/dockerhttp.js");
