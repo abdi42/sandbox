@@ -18,6 +18,7 @@ describe("Containers",function(){
     config.binds = ["/home/abdullahimahamed0987/sandbox/temp/" + config.dirname + ":/codetree/tempDir:rw"]
     config.commands = ['/bin/bash']
 
+    done()
   })
 
   it("should create and start container",function(){
