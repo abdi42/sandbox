@@ -21,6 +21,10 @@ describe("Containers",function(){
     done()
   })
 
+  it("should rm",function(done){
+    done();
+  })
+
   it("should create and start container",function(){
     container.createTemps(config,function(){
       container.createContainer(config,function(err,containerId){
