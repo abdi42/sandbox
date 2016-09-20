@@ -1,3 +1,5 @@
+var dockerhttp = require("./dockerhttp.js");
+
 function createContainer(config,callback){
     var volume = config.volume;
     var binds = config.binds;
