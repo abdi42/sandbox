@@ -1,4 +1,9 @@
-var dockerhttp = require("../lib/dockerhttp.js");
+var dockerhttp = require("./dockerhttp.js");
+var cuid = require("cuid");
+var filesystem = require("./filesystem.js");
+var jsonfile = require("jsonfile");
+var langs = require("./langs.js");
+var fs = require("fs")
 
 function createContainer(config,callback){
     var containerOpts = {
@@ -32,7 +37,7 @@ function createContainer(config,callback){
 
 }
 
-exports.createTemps = function(data, callback){
+function createTemps(data, callback){
 
     var config = {
         source: data.source,
@@ -140,14 +145,20 @@ var config = {
     lang:"C++",
     name:"abdi42"
 }
-config.image = "coderunner"
-config.volume = "/codetree/tempDir"
-config.binds = ["/home/abdullahimahamed0987/sandbox/temp/" + config.dirname + ":/codetree/tempDir:rw"]
-config.commands = ['/bin/bash']
+config.dirname = cuid();
+
+createTemps(config,function(){
+
+  config.image = "coderunner"
+  config.volume = "/codetree/tempDir"
+  config.binds = ["/home/abdullahimahamed0987/sandbox/temp/" + config.dirname + ":/codetree/tempDir:rw"]
+  config.commands = ['/bin/bash']
 
 
-createContainer(config,function(err,containerId){
-  if(err) throw Error(err)
+  createContainer(config,function(err,containerId){
+    if(err) throw Error(err)
 
-  console.log(containerId)
+    console.log(containerId)
+  })
+
 })
