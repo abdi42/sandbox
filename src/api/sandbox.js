@@ -6,15 +6,22 @@ var cuid = require("cuid");
 var fs = require("fs");
 var eval = require("../lib/eval.js")
 var exec = require("child_process").exec;
+var container = require("../lib/container.js");
 
 var Sandbox = {
     create: function(req, res, callback) {
         req.body.dirname = cuid();
 
-        createTemps(req.body.dirname, req, function(err) {
+        var config = req.body
+        config.image = "coderunner"
+        config.volume = "/codetree/tempDir"
+        config.binds = ["/home/abdullahimahamed0987/sandbox/temp/" + config.dirname + ":/codetree/tempDir:rw"]
+        config.commands = ['/bin/bash']
+
+        dockerContainer.createTemps(req.body, function(err) {
             if (err) return callback(err)
 
-            createContainer(req.body.dirname, function(err, containerId) {
+            createContainer(config,function(err, containerId) {
                 if (err) return callback(err);
 
                 req.body.containerId = containerId;
@@ -95,111 +102,6 @@ var Sandbox = {
     }
 }
 
-
-function createContainer(dirname, callback) {
-    var containerOpts = {
-        AttachStdout: true,
-        AttachStderr: true,
-        Image: "coderunner",
-        OpenStdin: true,
-        Volumes: {
-            "/codetree/tempDir": {}
-        },
-        NetworkDisabled:true,
-        HostConfig:{
-          Binds:["/home/abdullahimahamed0987/sandbox/temp/" + dirname + ":/codetree/tempDir:rw"]
-        },
-        Cmd: ['/bin/bash']
-    }
-
-    dockerhttp.post("/containers/create", containerOpts, function(err, body) {
-        if (err) return callback(err)
-
-        var containerId = body.Id;
-
-        dockerhttp.post("/containers/" + containerId + "/start", {}, function(err, body) {
-            if (err) return callback(err)
-
-            return callback(null, containerId);
-        })
-    })
-
-}
-
-function containerExec(containerId,callback){
-    var execOpts = {
-      AttachStdout: true,
-      AttachStderr: true,
-      Tty: false,
-      Cmd: ['node' , 'app.js']
-    }
-
-    dockerhttp.post("/containers/"+containerId+"/exec",execOpts,function(err,body){
-        dockerhttp.post("/exec/"+body.Id+"/start",{ Detach: false,Tty: false },function(err){
-            if(err) return callback(err)
-
-            return callback(null);
-        })
-    })
-}
-
-function createTemps(dirname, req, callback) {
-
-    var config = {
-        source: req.body.source,
-        lang: langs[req.body.lang],
-        dirname: dirname,
-        data: {
-            input: req.body.input,
-            expectedOutput: req.body.output
-        }
-    }
-
-    var folders = [{
-        path: "temp/" + config.dirname,
-    }, {
-        path: "temp/" + config.dirname + "/src"
-    }, {
-        path: "temp/" + config.dirname + "/src/output"
-    }, {
-        path: "temp/" + config.dirname + "/src/input"
-    }]
-
-    var files = [{
-        path: "temp/" + config.dirname + "/src/" + config.lang.fileName + config.lang.compileExt,
-        data: config.source
-    }]
-
-    for (var i = 0; i < config.data.input.length; i++) {
-        var inputStr = config.data.input[i].join('\n');
-
-        files.push({
-            path: "temp/" + config.dirname + "/src/input/" + i + ".txt",
-            data: inputStr
-        })
-    }
-
-    filesystem.createDirectory(folders, function(err) {
-        if (err) return callback(err);
-        filesystem.createFile(files, function(err) {
-            if (err) return callback(err)
-
-            var file = "temp/" + dirname + "/data.json";
-            config.source = "";
-
-            jsonfile.writeFileSync(file, config, {
-                spaces: 2
-            })
-
-            return callback(null);
-
-        })
-    })
-
-
-
-}
-
 function evalute(dirname,data,callback){
   eval.checkFiles("temp/"+dirname+"/src/output",data.expectedOutput,function(err,result){
     if(err) return callback(err);
@@ -208,25 +110,5 @@ function evalute(dirname,data,callback){
   })
 }
 
-function updateCode(dirname,req,callback){
-  var config = {
-    source:req.body.source,
-    lang:langs[req.body.lang],
-    dirname:dirname,
-  }
-
-  var files = [
-    {
-      path:"temp/"+config.dirname+"/src/"+config.lang.fileName+config.lang.compileExt,
-      data:config.source
-    }
-  ]
-
-  filesystem.createFile(files,function(err){
-    if(err) return callback(err)
-    return callback(null);
-  })
-
-}
 
 module.exports = Sandbox;
