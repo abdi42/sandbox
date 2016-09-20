@@ -27,6 +27,7 @@ describe("Containers",function(){
         if(err) throw Error(err)
 
         container.exec(containerId,['node','app.js'],function(err){
+          console.log(err)
           if(err) throw Error(err)
           done();
         })

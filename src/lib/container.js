@@ -20,7 +20,6 @@ exports.createContainer = function(config,callback){
 
     containerOpts.Volumes[config.volume] = {};
 
-    console.log(containerOpts)
 
     dockerhttp.post("/containers/create", containerOpts, function(err, body) {
         if (err) return callback(err)
