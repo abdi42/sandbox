@@ -20,6 +20,8 @@ function createContainer(config,callback){
         Cmd: commands
     }
 
+    console.log(containerOpts)
+
     dockerhttp.post("/containers/create", containerOpts, function(err, body) {
         if (err) return callback(err)
 
