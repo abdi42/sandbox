@@ -20,7 +20,7 @@ function containerExec(containerId,callback){
     })
 }
 
-describe("DockerHttp",function(){
+describe("Docker Remote API",function(){
 
   before(function(done){
     var containerOpts = {
@@ -53,7 +53,7 @@ describe("DockerHttp",function(){
   })
 
 
-  it("should start a docker container",function(){
+  it("/containers/start",function(){
     dockerhttp.post("/containers/" + container.Id + "/start", {}, function(err, body) {
         if (err) throw new Error(err)
         done();
@@ -77,7 +77,7 @@ describe("DockerHttp",function(){
     })
   })
 
-  it("should stop and remove container",function(){
+  it("/containers/stop & /containers/containerId",function(){
     dockerhttp.post("/containers/"+container.Id+"/stop",{},function(err){
         if(err) throw new Error(err)
 
