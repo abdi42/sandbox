@@ -21,24 +21,15 @@ describe("Containers",function(){
     done()
   })
 
-  it("should rm",function(done){
-    done();
-  })
-
   it("should create and start container",function(){
     container.createTemps(config,function(){
       container.createContainer(config,function(err,containerId){
         if(err) throw Error(err)
 
-        it("should execute command",function(){
-          container.exec(containerId,['node','app.js'],function(err){
-            if(err) throw Error(err)
-
-            done();
-          })
+        container.exec(containerId,['node','app.js'],function(err){
+          if(err) throw Error(err)
+          done();
         })
-
-        done();
 
       })
     })
