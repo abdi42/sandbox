@@ -9,3 +9,4 @@ require("./modules/filesystem.js");
 require("./modules/program.js");
 require("./modules/eval.js");
 require("./modules/dockerhttp.js");
+require("./modules/container.js");
