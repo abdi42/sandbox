@@ -1,24 +1,20 @@
-var dockerhttp = require("./dockerhttp.js");
+var dockerhttp = require("../lib/dockerhttp.js");
 
 function createContainer(config,callback){
-    var volume = config.volume;
-    var binds = config.binds;
-    var commands = config.commands;
-
     var containerOpts = {
         AttachStdout: true,
         AttachStderr: true,
         Image: config.image,
         OpenStdin: true,
-        Volumes: {
-            volume:{}
-        },
+        Volumes: {},
         NetworkDisabled:true,
         HostConfig:{
-          Binds:binds
+          Binds:config.binds
         },
-        Cmd: commands
+        Cmd: config.commands
     }
+
+    containerOpts.Volumes[config.volume] = {};
 
     console.log(containerOpts)
 
