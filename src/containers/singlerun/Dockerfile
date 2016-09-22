@@ -12,7 +12,7 @@ ENV TERM xterm
 RUN echo $topDir
 RUN mkdir codetree
 WORKDIR codetree
-ADD ../../package.json package.json
+ADD /package.json package.json
 RUN npm install
 ADD ./src .
 ADD ../../lib/program.js .
