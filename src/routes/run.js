@@ -43,6 +43,7 @@ router.post('/',function(req,res,callback){
   var data = fs.readFileSync("temp/" + req.body.dirname + "/src/output/0.txt","utf8");
   var outputArr = data.split("\n");
   req.body.output = outputArr;
+
   return callback(null);
 },function(req,res,callback){
 
@@ -54,7 +55,7 @@ router.post('/',function(req,res,callback){
           res.status(500).send(stderr)
 
         res.json({
-          output:req.body.outputArr
+          output:req.body.output
         });
       })
   })
