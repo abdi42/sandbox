@@ -3,7 +3,7 @@ var filesystem = require("./filesystem.js");
 var jsonfile = require("jsonfile");
 var langs = require("./langs.js");
 var fs = require("fs")
-
+var cuid = require("cuid")
 createContainer = function(config,callback){
     var containerOpts = {
         AttachStdout: true,
