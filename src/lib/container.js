@@ -113,6 +113,10 @@ exports.update = function (data,callback){
     source:data.source,
     lang:langs[data.lang],
     dirname:data.dirname,
+    data: {
+        input: data.input,
+        expectedOutput: data.output
+    }
   }
 
   var files = [
