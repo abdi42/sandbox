@@ -23,12 +23,13 @@ describe("Containers",function(){
 
   it("should create and start container",function(){
     container.createTemps(config,function(){
+      console.log("Temps created")
       container.createContainer(config,function(err,containerId){
-        if(err) throw Error(err)
-
+        if(err) throw new Error(err)
+        console.log("Container Create/Started")
         container.exec(containerId,['node','app.js'],function(err){
-          console.log('testing')
-          if(err) throw Error(err)
+          console.log("Execution")
+          if(err) throw new Error(err)
           done();
         })
 
