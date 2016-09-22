@@ -45,7 +45,7 @@ router.post('/',function(req,res,callback){
   req.body.output = outputArr;
   return callback(null);
 },function(req,res,callback){
-  
+
   dockerhttp.post("/containers/"+req.body.containerId+"/stop",{},function(err){
       if(err) res.status(500).send(stderr)
 
@@ -54,7 +54,7 @@ router.post('/',function(req,res,callback){
           res.status(500).send(stderr)
 
         res.json({
-          output:req.body.outputArr;
+          output:req.body.outputArr
         });
       })
   })
