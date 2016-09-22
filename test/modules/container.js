@@ -24,6 +24,7 @@ describe("Containers",function(){
   it("should create and start container",function(){
     container.createTemps(config,function(){
       console.log("Temps created")
+      console.log(container)
       container.createContainer(config,function(err,containerId){
         if(err) throw new Error(err)
         console.log("Container Create/Started")
