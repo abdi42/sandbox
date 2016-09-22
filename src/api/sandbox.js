@@ -34,7 +34,7 @@ var Sandbox = {
         dockerContainer.updateCode(req.body,function(err){
             if(err) return callback(err)
 
-            dockerContainer.containerExec(req.body.containerId,,['node','app.js'],function(err){
+            dockerContainer.containerExec(req.body.containerId,['node','app.js'],function(err){
                 if(err) return callback(err)
 
                 return callback();
