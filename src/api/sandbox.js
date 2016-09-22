@@ -93,7 +93,7 @@ var Sandbox = {
         dockerhttp.post("/containers/"+req.body.containerId+"/stop",{},function(err){
             if(err) return callback(err)
 
-            dockerhttp.delete("/containers/"+req.body.containerId+"?v=1",{},function(err){
+            dockerhttp.delete("/containers/"+req.body.containerId,{},function(err){
                 if(err) return callback(err)
 
                 return callback();
