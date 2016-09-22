@@ -43,7 +43,7 @@ router.post('/',function(req,res,callback){
   var data = fs.readFileSync("temp/" + req.body.dirname + "/src/output/0.txt","utf8");
   var outputArr = data.split("\n");
   return res.json({
-    output:outputArr;
+    output:outputArr
   })
 });
 
