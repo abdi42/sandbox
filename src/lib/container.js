@@ -26,9 +26,11 @@ exports.createContainer = function(config,callback){
 
         var containerId = body.Id;
 
+        console.log(containerId)
+
         dockerhttp.post("/containers/" + containerId + "/start", {}, function(err, body) {
             if (err) return callback(err)
-
+            console.log("Exec")
             return callback(null, containerId);
         })
     })
