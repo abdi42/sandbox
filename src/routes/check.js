@@ -1,19 +1,12 @@
 var express = require('express');
 var router = express.Router();
 var sandbox = require("../api/sandbox.js")
-var dockerhttp = require("../lib/dockerhttp.js");
-var langs = require("../lib/langs.js");
-var cuid = require("cuid");
-var fs = require("fs");
-var exec = require("child_process").exec;
-var dockerContainer = require("../lib/container.js");
-
 
 router.post('/',function(req,res,callback){
   req.body.dirname = cuid();
 
   var config = req.body
-  config.image = "singlerun"
+  config.image = "coderunner"
   config.volume = "/codetree/tempDir"
   config.binds = ["/home/abdullahimahamed0987/sandbox/temp/" + config.dirname + ":/codetree/tempDir:rw"]
   config.commands = ['/bin/bash']
@@ -40,12 +33,51 @@ router.post('/',function(req,res,callback){
       })
   })
 },function(req,res,callback){
-  var data = fs.readFileSync("temp/" + req.body.dirname + "/src/output/0.txt","utf8");
-  var outputArr = data.split("\n");
-  req.body.output = outputArr;
-  return callback(null);
+  done = false;
+
+  fs.readFile("temp/"+req.body.dirname+"/compileout.txt","utf8", function(err,data) {
+      if (err) {
+        return;
+      }
+      else{
+
+        exec("rm temp/"+req.body.dirname+"/compileout.txt",function(err,stdout,stderr){
+          if(err) return callback(err)
+
+          return callback();
+        })
+
+      }
+  });
+
+
+  fs.access("temp/"+req.body.dirname+"/completed.txt", fs.F_OK, function(err) {
+      if (err) {
+          return;
+      }
+      else{
+        evalute(req.body.dirname,{
+          input:req.body.input,
+          expectedOutput:req.body.output
+        },function(err,result){
+
+          if(err) return callback(err)
+
+
+          exec("rm temp/"+req.body.dirname+"/completed.txt",function(err,stdout,stderr){
+            if(err) return callback(err)
+
+            req.body.result = result;
+
+            return callback();
+          })
+
+        })
+
+      }
+  });
+
 },function(req,res,callback){
-  
   dockerhttp.post("/containers/"+req.body.containerId+"/stop",{},function(err){
       if(err) res.status(500).send(stderr)
 
@@ -53,9 +85,7 @@ router.post('/',function(req,res,callback){
         if(err)
           res.status(500).send(stderr)
 
-        res.json({
-          output:req.body.outputArr;
-        });
+        res.json(req.body);
       })
   })
 });
