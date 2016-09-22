@@ -85,6 +85,7 @@ exports.createTemps = function(data, callback){
                 spaces: 2
             })
 
+            console.log("filesystem")
             return callback(null);
 
         })
@@ -92,7 +93,7 @@ exports.createTemps = function(data, callback){
 
 }
 
-exports.exec = function containerExec(containerId,commands,callback){
+exports.exec = function(containerId,commands,callback){
     var execOpts = {
       AttachStdout: true,
       AttachStderr: true,
@@ -109,7 +110,7 @@ exports.exec = function containerExec(containerId,commands,callback){
     })
 }
 
-exports.update = function updateCode(data,callback){
+exports.update = function(data,callback){
   var config = {
     source:data.source,
     lang:langs[data.lang],
