@@ -5,7 +5,7 @@ var langs = require("./langs.js");
 var fs = require("fs")
 var cuid = require("cuid");
 
-createContainer = function(config,callback){
+exports.createContainer = function(config,callback){
     var containerOpts = {
         AttachStdout: true,
         AttachStderr: true,
@@ -36,7 +36,7 @@ createContainer = function(config,callback){
 
 }
 
-createTemps = function(data, callback){
+exports.createTemps = function(data, callback){
 
     var config = {
         source: data.source,
@@ -91,7 +91,7 @@ createTemps = function(data, callback){
 
 }
 
-exec = function (containerId,commands,callback){
+exports.exec = function (containerId,commands,callback){
     var execOpts = {
       AttachStdout: true,
       AttachStderr: true,
@@ -108,7 +108,7 @@ exec = function (containerId,commands,callback){
     })
 }
 
-update = function (data,callback){
+exports.update = function (data,callback){
   var config = {
     source:data.source,
     lang:langs[data.lang],
@@ -137,6 +137,7 @@ update = function (data,callback){
 
 }
 
+/*
 var config = {
     input:[["Hello World"],["hello"]],
     output:[["Hello World"],["hello"]],
@@ -163,3 +164,4 @@ createTemps(config,function(){
 
   })
 })
+*/

@@ -6,7 +6,7 @@ var cuid = require("cuid");
 var fs = require("fs");
 var eval = require("../lib/eval.js")
 var exec = require("child_process").exec;
-var container = require("../lib/container.js");
+var dockerContainer = require("../lib/container.js");
 
 var Sandbox = {
     create: function(req, res, callback) {
@@ -21,7 +21,7 @@ var Sandbox = {
         dockerContainer.createTemps(req.body, function(err) {
             if (err) return callback(err)
 
-            createContainer(config,function(err, containerId) {
+            dockerContainer.createContainer(config,function(err, containerId) {
                 if (err) return callback(err);
 
                 req.body.containerId = containerId;
@@ -31,10 +31,10 @@ var Sandbox = {
         })
     },
     runCode:function(req,res,callback){
-        updateCode(req.body.dirname,req,function(err){
+        dockerContainer.updateCode(req.body,function(err){
             if(err) return callback(err)
 
-            containerExec(req.body.containerId,function(err){
+            dockerContainer.containerExec(req.body.containerId,,['node','app.js'],function(err){
                 if(err) return callback(err)
 
                 return callback();
