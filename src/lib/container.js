@@ -91,7 +91,7 @@ exports.createTemps = function(data, callback){
 
 }
 
-exports.exec = function (containerId,commands,callback){
+exports.containerExec = function (containerId,commands,callback){
     var execOpts = {
       AttachStdout: true,
       AttachStderr: true,
@@ -125,7 +125,7 @@ exports.update = function (data,callback){
   filesystem.createFile(files,function(err){
     if(err) return callback(err)
 
-    var file = "temp/" + dirname + "/data.json";
+    var file = "temp/" + config.dirname + "/data.json";
     config.source = "";
 
     jsonfile.writeFileSync(file, config, {
