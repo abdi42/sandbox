@@ -51,10 +51,9 @@ var Sandbox = {
           else{
 
             exec("rm temp/"+req.body.dirname+"/compileout.txt",function(err,stdout,stderr){
-              if(err)
-                res.status(500).send(stderr)
+              if(err) return callback(err)
 
-              res.status(500).send(data);
+              return callback();
             })
 
           }
@@ -71,16 +70,15 @@ var Sandbox = {
               expectedOutput:req.body.output
             },function(err,result){
 
-              if(err){
-                res.status(500).send(err);
-              }
+              if(err) return callback(err)
+
 
               exec("rm temp/"+req.body.dirname+"/completed.txt",function(err,stdout,stderr){
-                if(err)
-                  res.status(500).send(stderr)
+                if(err) return callback(err)
 
                 req.body.result = result;
-                res.json(req.body);
+
+                return callback();
               })
 
             })
@@ -91,12 +89,13 @@ var Sandbox = {
     },
     remove:function(req,res,callback){
         dockerhttp.post("/containers/"+req.body.containerId+"/stop",{},function(err){
-            if(err) return callback(err)
+            if(err) res.status(500).send(stderr)
 
             dockerhttp.delete("/containers/"+req.body.containerId,{},function(err){
-                if(err) return callback(err)
+              if(err)
+                res.status(500).send(stderr)
 
-                return callback();
+              res.json(req.body);
             })
         })
     }
