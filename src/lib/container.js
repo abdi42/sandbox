@@ -5,7 +5,7 @@ var langs = require("./langs.js");
 var fs = require("fs")
 var cuid = require("cuid");
 
-exports.createContainer = function(config,callback){
+createContainer = function(config,callback){
     var containerOpts = {
         AttachStdout: true,
         AttachStderr: true,
@@ -36,7 +36,7 @@ exports.createContainer = function(config,callback){
 
 }
 
-exports.createTemps = function(data, callback){
+createTemps = function(data, callback){
 
     var config = {
         source: data.source,
@@ -91,7 +91,7 @@ exports.createTemps = function(data, callback){
 
 }
 
-exports.exec = function (containerId,commands,callback){
+exec = function (containerId,commands,callback){
     var execOpts = {
       AttachStdout: true,
       AttachStderr: true,
@@ -108,7 +108,7 @@ exports.exec = function (containerId,commands,callback){
     })
 }
 
-exports.update = function (data,callback){
+update = function (data,callback){
   var config = {
     source:data.source,
     lang:langs[data.lang],
@@ -151,13 +151,13 @@ config.binds = ["/home/abdullahimahamed0987/sandbox/temp/" + config.dirname + ":
 config.commands = ['/bin/bash']
 
 
-container.createTemps(config,function(){
+createTemps(config,function(){
   console.log("Temps created")
   console.log(container)
-  container.createContainer(config,function(err,containerId){
+  createContainer(config,function(err,containerId){
     if(err) throw new Error(err)
     console.log("Container Create/Started")
-    container.exec(containerId,['node','app.js'],function(err){
+    exec(containerId,['node','app.js'],function(err){
       console.log("Execution")
       if(err) throw new Error(err)
     })
