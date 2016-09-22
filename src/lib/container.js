@@ -153,7 +153,6 @@ config.commands = ['/bin/bash']
 
 createTemps(config,function(){
   console.log("Temps created")
-  console.log(container)
   createContainer(config,function(err,containerId){
     if(err) throw new Error(err)
     console.log("Container Create/Started")
