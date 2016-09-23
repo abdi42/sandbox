@@ -26,8 +26,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/check', check);
 app.use('/run', run);
-app.use('/sandbox',sandboxRun)
-app.use('/init',sandboxInit)
+app.use('/sandbox/run',sandboxRun)
+app.use('/sandbox/init',sandboxInit)
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
