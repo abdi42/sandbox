@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var sandbox = require("../api/sandbox.js")
+var cuid = require("cuid");
 
 router.post('/',function(req,res,callback){
   req.body.dirname = cuid();
