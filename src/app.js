@@ -7,7 +7,7 @@ var bodyParser = require('body-parser');
 
 var check = require('./routes/check.js');
 var run = require('./routes/run.js');
-var sandboxRun = require("./routes/sandbox/sandbox.js");
+var sandboxRun = require("./routes/sandbox/run.js");
 var sandboxInit = require("./routes/sandbox/init.js")
 
 var app = express();
