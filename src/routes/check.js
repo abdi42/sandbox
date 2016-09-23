@@ -7,6 +7,7 @@ var cuid = require("cuid");
 var fs = require("fs");
 var exec = require("child_process").exec;
 var dockerContainer = require("../lib/container.js");
+var eval = require("../lib/eval.js")
 
 router.post('/',function(req,res,callback){
   req.body.dirname = cuid();
@@ -95,5 +96,13 @@ router.post('/',function(req,res,callback){
       })
   })
 });
+
+function evalute(dirname,data,callback){
+  eval.checkFiles("temp/"+dirname+"/src/output",data.expectedOutput,function(err,result){
+    if(err) return callback(err);
+
+    return callback(null,result);
+  })
+}
 
 module.exports = router;
