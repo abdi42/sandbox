@@ -1,8 +1,6 @@
 var express = require('express');
 var router = express.Router();
 
-router.post('/',function(req,res,callback){
-  res.send("hello world")
-});
+router.post('/',,sandbox.create,sandbox.runCode,sandbox.checkCode);
 
 module.exports = router;
