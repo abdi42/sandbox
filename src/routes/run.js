@@ -13,7 +13,7 @@ router.post('/',function(req,res,callback){
   req.body.dirname = cuid();
 
   var config = req.body
-  config.image = "singlerun"
+  config.image = "coderunner"
   config.volume = "/codetree/tempDir"
   config.binds = ["/home/abdullahimahamed0987/sandbox/temp/" + config.dirname + ":/codetree/tempDir:rw"]
   config.commands = ['/bin/bash']
