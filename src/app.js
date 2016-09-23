@@ -25,7 +25,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/check', check);
-app.use('/run', require('./routes/start.js'));
+app.use('/run', run);
 app.use('/sandbox',sandboxRun)
 app.use('/init',sandboxInit)
 // catch 404 and forward to error handler
