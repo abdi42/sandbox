@@ -7,7 +7,8 @@ var bodyParser = require('body-parser');
 
 var check = require('./routes/check.js');
 var run = require('./routes/run.js');
-var sandbox = require("./routes/sandbox.js");
+var sandboxRun = require("./routes/sandbox/sandbox.js");
+var sandboxInit = require("./routes/sandbox/init.js")
 
 var app = express();
 
@@ -25,7 +26,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/check', check);
 app.use('/run', require('./routes/start.js'));
-app.use('/sandbox',sandbox)
+app.use('/sandbox',sandboxRun)
+app.use('/init',sandboxInit)
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
