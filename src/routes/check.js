@@ -50,7 +50,7 @@ router.post('/',function(req,res,callback){
 
         exec("rm temp/"+req.body.dirname+"/compileout.txt",function(err,stdout,stderr){
           if(err) return callback(err)
-
+          res.status(500).send(stderr)
           return callback();
         })
 
@@ -86,13 +86,13 @@ router.post('/',function(req,res,callback){
 
 },function(req,res,callback){
   dockerhttp.post("/containers/"+req.body.containerId+"/stop",{},function(err){
-      if(err) res.status(500).send(stderr)
+      if(err) res.status(500).send(err)
 
       dockerhttp.delete("/containers/"+req.body.containerId,{},function(err){
         if(err)
-          res.status(500).send(stderr)
+          res.status(500).send(err)
 
-        res.json(req.body);
+        res.json(req.body.result);
       })
   })
 });
