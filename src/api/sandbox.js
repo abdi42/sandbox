@@ -50,13 +50,11 @@ var Sandbox = {
           }
           else{
 
-            removeContainer(req,function(){
+            removeContainer(req)
 
-              res.status(400).json({
-                status:400,
-                error:data
-              })
-
+            res.status(400).json({
+              status:400,
+              error:data
             })
           }
       });
@@ -74,14 +72,13 @@ var Sandbox = {
 
               if(err) return callback(err);
 
-              removeContainer(req,function(err){
-                console.log(err);
-                req.body.result = result;
+              removeContainer(req)
 
-                res.json({
-                  status:200,
-                  result:req.body.result
-                })
+              req.body.result = result;
+
+              res.json({
+                status:200,
+                result:req.body.result
               })
 
             })
@@ -97,13 +94,11 @@ var Sandbox = {
           }
           else{
 
-            removeContainer(req,function(){
+            removeContainer(req)
 
-              res.status(400).json({
-                status:400,
-                error:data
-              })
-
+            res.status(400).json({
+              status:400,
+              error:data
             })
           }
       });
