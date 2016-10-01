@@ -13,6 +13,7 @@ module.exports = function(req,res,callback){
           })
         }
         else{
+          req.body.input = [req.body.input];
           return callback();
         }
       }
