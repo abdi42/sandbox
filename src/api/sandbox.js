@@ -10,7 +10,6 @@ var dockerContainer = require("../lib/container.js");
 
 var Sandbox = {
     create: function(req, res, callback) {
-      console.log("Create")
       req.body.dirname = cuid();
 
       var config = req.body
@@ -32,7 +31,6 @@ var Sandbox = {
       })
     },
     runCode:function(req,res,callback){
-      console.log("runCode")
       dockerContainer.update(req.body,function(err){
           if(err) return callback(err)
 
@@ -44,7 +42,6 @@ var Sandbox = {
       })
     },
     checkCode:function(req,res,callback){
-      console.log("CheckCode")
       done = false;
 
       fs.readFile("temp/"+req.body.dirname+"/compileout.txt","utf8", function(err,data) {
@@ -75,7 +72,7 @@ var Sandbox = {
               expectedOutput:req.body.output
             },function(err,result){
 
-              if(err) res.status(500).send(err)
+              if(err) return callback(err);
 
               removeContainer(req,function(){
                 req.body.result = result;
@@ -134,7 +131,7 @@ var Sandbox = {
     },
     remove:function(req,res,callback){
         dockerhttp.post("/containers/"+req.body.containerId+"/stop",{},function(err){
-            if(err) res.status(500).send(stderr)
+            if(err) return callback(err);
 
             dockerhttp.delete("/containers/"+req.body.containerId,{},function(err){
               if(err)
