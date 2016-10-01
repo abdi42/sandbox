@@ -7,8 +7,8 @@ var cuid = require("cuid");
 var fs = require("fs");
 var exec = require("child_process").exec;
 var dockerContainer = require("../lib/container.js");
+var checkSingleRun = require("../middleware/checkSingleRun.js")
 
-
-router.post('/',sandbox.create,sandbox.runCode,sandbox.getOutput);
+router.post('/',checkSingleRun,sandbox.create,sandbox.runCode,sandbox.getOutput);
 
 module.exports = router;
