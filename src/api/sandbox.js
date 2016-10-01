@@ -131,7 +131,7 @@ var Sandbox = {
           }
       });
 
-    }
+    },
     remove:function(req,res,callback){
         dockerhttp.post("/containers/"+req.body.containerId+"/stop",{},function(err){
             if(err) res.status(500).send(stderr)
