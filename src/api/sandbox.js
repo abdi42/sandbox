@@ -10,6 +10,7 @@ var dockerContainer = require("../lib/container.js");
 
 var Sandbox = {
     create: function(req, res, callback) {
+      console.log("Create")
       req.body.dirname = cuid();
 
       var config = req.body
@@ -31,6 +32,7 @@ var Sandbox = {
       })
     },
     runCode:function(req,res,callback){
+      console.log("runCode")
       dockerContainer.update(req.body,function(err){
           if(err) return callback(err)
 
@@ -42,47 +44,94 @@ var Sandbox = {
       })
     },
     checkCode:function(req,res,callback){
+      console.log("CheckCode")
       done = false;
 
-        fs.readFile("temp/"+req.body.dirname+"/compileout.txt","utf8", function(err,data) {
-            if (err) {
-              return;
-            }
-            else{
+      fs.readFile("temp/"+req.body.dirname+"/compileout.txt","utf8", function(err,data) {
+          if (err) {
+            return;
+          }
+          else{
 
-              removeContainer(req,function(){
+            removeContainer(req,function(){
 
-                res.status(400).json({
-                  status:400,
-                  error:data
-                })
-
+              res.status(400).json({
+                status:400,
+                error:data
               })
-            }
-        });
+
+            })
+          }
+      });
 
 
-        fs.access("temp/"+req.body.dirname+"/completed.txt", fs.F_OK, function(err) {
-            if (err) {
-                return;
-            }
-            else{
+      fs.access("temp/"+req.body.dirname+"/completed.txt", fs.F_OK, function(err) {
+          if (err) {
+              return;
+          }
+          else{
+            evalute(req.body.dirname,{
+              input:req.body.input,
+              expectedOutput:req.body.output
+            },function(err,result){
+
+              if(err) res.status(500).send(err)
+
               removeContainer(req,function(){
-
-                var data = fs.readFileSync("temp/" + req.body.dirname + "/src/output/0.txt","utf8");
-                var outputArr = data.split("\n");
-                req.body.output = outputArr;
+                req.body.result = result;
 
                 res.json({
                   status:200,
-                  output:req.body.output
+                  result:req.body.result
                 })
-
               })
-            }
-        });
+
+            })
+
+          }
+      });
 
     },
+    getOutput:function(){
+      fs.readFile("temp/"+req.body.dirname+"/compileout.txt","utf8", function(err,data) {
+          if (err) {
+            return;
+          }
+          else{
+
+            removeContainer(req,function(){
+
+              res.status(400).json({
+                status:400,
+                error:data
+              })
+
+            })
+          }
+      });
+
+
+      fs.access("temp/"+req.body.dirname+"/completed.txt", fs.F_OK, function(err) {
+          if (err) {
+              return;
+          }
+          else{
+            removeContainer(req,function(){
+
+              var data = fs.readFileSync("temp/" + req.body.dirname + "/src/output/0.txt","utf8");
+              var outputArr = data.split("\n");
+              req.body.output = outputArr;
+
+              res.json({
+                status:200,
+                output:req.body.output
+              })
+
+            })
+          }
+      });
+
+    }
     remove:function(req,res,callback){
         dockerhttp.post("/containers/"+req.body.containerId+"/stop",{},function(err){
             if(err) res.status(500).send(stderr)
