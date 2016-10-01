@@ -114,18 +114,17 @@ var Sandbox = {
               return;
           }
           else{
-            removeContainer(req,function(){
+            removeContainer(req)
 
-              var data = fs.readFileSync("temp/" + req.body.dirname + "/src/output/0.txt","utf8");
-              var outputArr = data.split("\n");
-              req.body.output = outputArr;
+            var data = fs.readFileSync("temp/" + req.body.dirname + "/src/output/0.txt","utf8");
+            var outputArr = data.split("\n");
+            req.body.output = outputArr;
 
-              res.json({
-                status:200,
-                output:req.body.output
-              })
-
+            res.json({
+              status:200,
+              output:req.body.output
             })
+
           }
       });
 
@@ -155,13 +154,7 @@ function evalute(dirname,data,callback){
 
 function removeContainer(req,callback){
   dockerhttp.post("/containers/"+req.body.containerId+"/stop",{},function(err){
-      if(err) return callback(stderr)
-
       dockerhttp.delete("/containers/"+req.body.containerId,{},function(err){
-        if(err)
-          return callback(stderr)
-
-        return callback()
       })
   })
 }
