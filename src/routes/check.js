@@ -10,7 +10,7 @@ var dockerContainer = require("../lib/container.js");
 var eval = require("../lib/eval.js")
 
 router.post('/',sandbox.create,sandbox.create,sandbox.runCode,sandbox.checkCode,function(req,res,callback){
-  console.log("Checking remove")
+  console.log(req.body.containerId)
   dockerhttp.post("/containers/"+req.body.containerId+"/stop",{},function(err){
       if(err) res.status(500).send(err)
 
