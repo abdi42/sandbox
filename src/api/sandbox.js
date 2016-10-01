@@ -92,7 +92,7 @@ var Sandbox = {
       });
 
     },
-    getOutput:function(){
+    getOutput:function(req,res,callback){
       fs.readFile("temp/"+req.body.dirname+"/compileout.txt","utf8", function(err,data) {
           if (err) {
             return;
