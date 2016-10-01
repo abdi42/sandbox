@@ -47,17 +47,14 @@ router.post('/',function(req,res,callback){
       }
       else{
 
-        res.status(500).json({
-          status:400,
-          error:data
-        })
-        
-        exec("rm temp/"+req.body.dirname+"/compileout.txt",function(err,stdout,stderr){
-          if(err) return callback(err)
+        removeContainer(req,function(){
 
-          return callback();
-        })
+          res.status(400).json({
+            status:400,
+            error:data
+          })
 
+        })
       }
   });
 
@@ -67,28 +64,34 @@ router.post('/',function(req,res,callback){
           return;
       }
       else{
-        var data = fs.readFileSync("temp/" + req.body.dirname + "/src/output/0.txt","utf8");
-        var outputArr = data.split("\n");
-        req.body.output = outputArr;
+        removeContainer(req,function(){
 
-        return callback(null);
+          var data = fs.readFileSync("temp/" + req.body.dirname + "/src/output/0.txt","utf8");
+          var outputArr = data.split("\n");
+          req.body.output = outputArr;
+
+          res.json({
+            status:200,
+            output:req.body.output
+          })
+
+        })
       }
   });
 
-},function(req,res,callback){
+});
 
+function removeContainer(req,callback){
   dockerhttp.post("/containers/"+req.body.containerId+"/stop",{},function(err){
-      if(err) res.status(500).send(stderr)
+      if(err) return callback(stderr)
 
       dockerhttp.delete("/containers/"+req.body.containerId,{},function(err){
         if(err)
-          res.status(500).send(stderr)
+          return callback(stderr)
 
-        res.json({
-          output:req.body.output
-        });
+        return callback()
       })
   })
-});
+}
 
 module.exports = router;
