@@ -1,3 +1,5 @@
+var langs = require("../lib/langs.js");
+
 module.exports = function(req,res,callback){
   if(!req.body.input){
     req.body.input = [[" "]]
@@ -23,5 +25,21 @@ module.exports = function(req,res,callback){
         return callback()
       }
     }
+  }
+
+  if(!req.body.source.length > 0){
+    res.status(400)
+    res.json({
+      status:400,
+      error:"Source code empty"
+    })
+  }
+
+  if(!langs[req.body.lang]){
+    res.status(400)
+    res.json({
+      status:400,
+      error:"Unknown language provided"
+    })
   }
 }
