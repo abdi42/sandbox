@@ -10,36 +10,36 @@ var dockerContainer = require("../lib/container.js");
 
 var Sandbox = {
     create: function(req, res, callback) {
-        req.body.dirname = cuid();
+      req.body.dirname = cuid();
 
-        var config = req.body
-        config.image = "coderunner"
-        config.volume = "/codetree/tempDir"
-        config.binds = ["/home/abdullahimahamed0987/sandbox/temp/" + config.dirname + ":/codetree/tempDir:rw"]
-        config.commands = ['/bin/bash']
+      var config = req.body
+      config.image = "coderunner"
+      config.volume = "/codetree/tempDir"
+      config.binds = ["/home/abdullahimahamed0987/sandbox/temp/" + config.dirname + ":/codetree/tempDir:rw"]
+      config.commands = ['/bin/bash']
 
-        dockerContainer.createTemps(req.body, function(err) {
-            if (err) return callback(err)
+      dockerContainer.createTemps(req.body, function(err) {
+          if (err) return callback(err)
 
-            dockerContainer.createContainer(config,function(err, containerId) {
-                if (err) return callback(err);
+          dockerContainer.createContainer(config,function(err, containerId) {
+              if (err) return callback(err);
 
-                req.body.containerId = containerId;
+              req.body.containerId = containerId;
 
-                return callback();
-            })
-        })
+              return callback();
+          })
+      })
     },
     runCode:function(req,res,callback){
-        dockerContainer.update(req.body,function(err){
-            if(err) return callback(err)
+      dockerContainer.update(req.body,function(err){
+          if(err) return callback(err)
 
-            dockerContainer.containerExec(req.body.containerId,['node','app.js'],function(err){
-                if(err) return callback(err)
+          dockerContainer.containerExec(req.body.containerId,['node','app.js'],function(err){
+              if(err) return callback(err)
 
-                return callback();
-            })
-        })
+              return callback();
+          })
+      })
     },
     checkCode:function(req,res,callback){
       done = false;
