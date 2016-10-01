@@ -74,7 +74,8 @@ var Sandbox = {
 
               if(err) return callback(err);
 
-              removeContainer(req,function(){
+              removeContainer(req,function(err){
+                console.log(err);
                 req.body.result = result;
 
                 res.json({
