@@ -9,6 +9,6 @@ var exec = require("child_process").exec;
 var dockerContainer = require("../lib/container.js");
 var eval = require("../lib/eval.js")
 
-router.post('/',sandbox.create,sandbox.create,sandbox.runCode,sandbox.checkCode);
+router.post('/',sandbox.create,sandbox.runCode,sandbox.checkCode);
 
 module.exports = router;
