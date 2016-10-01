@@ -12,6 +12,9 @@ module.exports = function(req,res,callback){
             error:"Input can't be" + typeof req.body.input[0]
           })
         }
+        else{
+          return callback();
+        }
       }
       else{
         req.body.input = [[" "]]
