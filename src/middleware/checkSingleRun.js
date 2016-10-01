@@ -10,7 +10,7 @@ module.exports = function(req,res,callback){
           res.status(400)
           res.json({
             status:400,
-            error:"Input can't be" + typeof req.body.input[0]
+            error:"Input can't be array"
           })
         }
         else{
