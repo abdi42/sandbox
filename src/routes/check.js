@@ -9,8 +9,9 @@ var exec = require("child_process").exec;
 var dockerContainer = require("../lib/container.js");
 var eval = require("../lib/eval.js")
 
-router.post('/',sandbox.create,sandbox.create,sandbox.runCode,sandbox.checkCode,function(req,res,callback){
-  console.log(req.body.containerId)
+router.post('/',sandbox.create,sandbox.create,sandbox.runCode,sandbox.checkCode,removeContainer);
+
+function removeContainer(req,res,callback){
   dockerhttp.post("/containers/"+req.body.containerId+"/stop",{},function(err){
       if(err) res.status(500).send(err)
 
@@ -21,6 +22,6 @@ router.post('/',sandbox.create,sandbox.create,sandbox.runCode,sandbox.checkCode,
         res.json(req.body.result);
       })
   })
-});
+}
 
 module.exports = router;
