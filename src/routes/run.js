@@ -47,7 +47,11 @@ router.post('/',function(req,res,callback){
       }
       else{
 
-        res.status(500).send(data)
+        res.status(500).json({
+          status:400,
+          error:data
+        })
+        
         exec("rm temp/"+req.body.dirname+"/compileout.txt",function(err,stdout,stderr){
           if(err) return callback(err)
 
