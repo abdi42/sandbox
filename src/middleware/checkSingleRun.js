@@ -3,7 +3,6 @@ var langs = require("../lib/langs.js");
 module.exports = function(req,res,callback){
   if(!req.body.input){
     req.body.input = [[" "]]
-    return callback();
   }
   else {
     if(Array.isArray(req.body.input)){
@@ -17,12 +16,10 @@ module.exports = function(req,res,callback){
         }
         else{
           req.body.input = [req.body.input];
-          return callback();
         }
       }
       else{
         req.body.input = [[" "]]
-        return callback()
       }
     }
   }
@@ -42,4 +39,6 @@ module.exports = function(req,res,callback){
       error:"Unknown language provided"
     })
   }
+
+  return callback();
 }
