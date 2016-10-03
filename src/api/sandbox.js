@@ -94,7 +94,7 @@ var Sandbox = {
           }
           else{
 
-            removeContainer(req)
+
 
             res.status(400).json({
               status:400,
@@ -109,7 +109,7 @@ var Sandbox = {
               return;
           }
           else{
-            removeContainer(req)
+            
 
             var data = fs.readFileSync("temp/" + req.body.dirname + "/src/output/0.txt","utf8");
             var outputArr = data.split("\n");
