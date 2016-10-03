@@ -12,13 +12,13 @@ module.exports = function(req,res,callback){
     return callback(err)
   }
 
-  if(!req.body.expectedOutput){
+  if(!req.body.expectedOutputs){
     var err = new Error("expectedOutput not provided")
     err.status = 400;
     return callback(err);
   }
 
-  req.body.output = req.body.expectedOutput
+  req.body.output = req.body.expectedOutputs
   req.body.input = req.body.testcases;
 
   if(Array.isArray(req.body.input)){
@@ -84,10 +84,17 @@ module.exports = function(req,res,callback){
     req.body.input = [req.body.input]
   }
 
-  if(req.body.testcases.length != req.body.expectedOutput.length){
-    var err = new Error("the length of testcases must be the same as the expected output")
-    err.status = 400;
-    return callback(err);
+  if(req.body.testcases.length != req.body.expectedOutputs.length){
+    if(req.body.testcases.length > req.body.expectedOutputs.length){
+      var err = new Error("the length of testcases must be the same as the length of expected outputs")
+      err.status = 400;
+      return callback(err);
+    }
+    else{
+      var err = new Error("the length of expected outputs must be the same as the length of testcases")
+      err.status = 400;
+      return callback(err);
+    }
   }
 
 
