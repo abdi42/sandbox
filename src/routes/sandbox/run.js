@@ -4,7 +4,7 @@ var sandbox = require("../../api/sandbox.js")
 var fs = require("fs");
 var eval = require("../../lib/eval.js")
 
-router.post('/',sandbox.runCode,,function(req,res,callback){
+router.post('/',sandbox.runCode,function(req,res,callback){
   fs.readFile("temp/"+req.body.dirname+"/compileout.txt","utf8", function(err,data) {
       if (err) {
         return;
