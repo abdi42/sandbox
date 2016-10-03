@@ -83,7 +83,8 @@ exports.createTemps = function(data, callback){
             jsonfile.writeFileSync(file, config, {
                 spaces: 2
             })
-            fs.readFile(file,function(err,data){
+            console.log(config)
+            fs.readFile(file,"utf8",function(err,data){
               console.log(data)
             })
             return callback(null);
