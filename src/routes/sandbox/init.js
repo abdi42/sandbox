@@ -11,7 +11,6 @@ router.post('/',sandbox.create,sandbox.runCode,function(req,res,callback){
       }
       else{
 
-        removeContainer(req)
 
         res.status(400).json({
           status:400,
@@ -26,7 +25,6 @@ router.post('/',sandbox.create,sandbox.runCode,function(req,res,callback){
       }
       else{
 
-        removeContainer(req)
 
         res.status(400).json({
           status:400,
@@ -48,7 +46,7 @@ router.post('/',sandbox.create,sandbox.runCode,function(req,res,callback){
 
           if(err) return callback(err);
 
-          removeContainer(req)
+
 
           req.body.result = result;
 
@@ -66,13 +64,6 @@ router.post('/',sandbox.create,sandbox.runCode,function(req,res,callback){
 
 
 });
-
-function removeContainer(req,callback){
-  dockerhttp.post("/containers/"+req.body.containerId+"/stop",{},function(err){
-      dockerhttp.delete("/containers/"+req.body.containerId,{},function(err){
-      })
-  })
-}
 
 function evalute(dirname,data,callback){
   eval.checkFiles("temp/"+dirname+"/src/output",data.expectedOutput,function(err,result){
