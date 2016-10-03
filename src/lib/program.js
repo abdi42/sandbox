@@ -78,7 +78,8 @@ Program.prototype.execute = function(cases,callback){
   process.chdir(this.path+"/src");
 
   if(noInput){
-    var execute = exec(lang.execute + lang.fileName+lang.executeExt + " > " + "output/" + index + ".txt",options);
+
+    var execute = exec(lang.execute + lang.fileName+lang.executeExt + " > " + "output/0.txt",options);
 
     execute.stderr.on('data', (data) => {
       if(data){
