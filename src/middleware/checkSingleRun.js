@@ -33,11 +33,7 @@ module.exports = function(req,res,callback){
   }
 
   if(!langs[req.body.lang]){
-    res.status(400)
-    res.json({
-      status:400,
-      error:"Unknown language provided"
-    })
+    return callback(new Error("Unknown language provided"))
   }
 
   return callback();
