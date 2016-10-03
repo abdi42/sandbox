@@ -91,8 +91,9 @@ Program.prototype.execute = function(cases,timeout,callback){
       }
     });
 
-    execute.on('close', (code) => {
+    execute.on('close', (code,signal) => {
       //Get back to top level directory
+      console.log(signal)
       process.chdir(topDir);
       return callback(null);
     });
