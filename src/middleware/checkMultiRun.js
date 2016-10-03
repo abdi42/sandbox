@@ -1,27 +1,30 @@
 var langs = require("../lib/langs.js");
 
 module.exports = function(req,res,callback){
-  if(!req.body.input){
-    req.body.input = [[" "]]
+
+  if(!req.body.timeout){
+    req.body.timeout = 3000;
   }
-  else {
-    if(Array.isArray(req.body.input)){
-      if(req.body.input.length > 0){
-        if(Array.isArray(req.body.input[0])){
-          res.status(400)
-          res.json({
-            status:400,
-            error:"Input can't be array"
-          })
-        }
-        else{
-          req.body.input = [req.body.input];
-        }
-      }
-      else{
-        req.body.input = [[" "]]
-      }
+
+  if(!req.body.testcases){
+    var err = new Error("TestCases not provided");
+    err.status = 400;
+    return callback(err)
+  }
+
+  req.body.input = req.body.testcases;
+
+  if(Array.isArray(req.body.input)){
+    if(!req.body.input.length > 0){
+      var err = new Error("testcases empty");
+      err.status = 400;
+      return callback(err)
     }
+  }
+  else{
+    var err = new Error("TestCases needs to be an array or matrix");
+    err.status = 400;
+    return callback(err)
   }
 
   if(!req.body.source.length > 0){
@@ -36,10 +39,41 @@ module.exports = function(req,res,callback){
     res.status(400)
     res.json({
       status:400,
-      error:"Unknown language provided"
+      error:"Unknown language"
     })
   }
 
+  var containsOther = false;
+  var containsArray = false;
+
+  for(var i=0;i<req.body.testcases.length;i++){
+    if(Array.isArray(req.body.testcases[i])){
+      containsArray = true;
+    }
+    else{
+      containsOther = true;
+    }
+  }
+
+  if(containsArray && containsOther){
+    var err = new Error("Incorrect testcases format")
+    err.status = 400;
+    return callback(err);
+  }
+  else if(containsArray){
+    for(var i=0;i<containsArray.length;i++){
+      for(var c=0;c<containsArray[i];i++){
+        if(Array.isArray(containsArray[i][c])){
+          var err = new Error("Incorrect testcases format")
+          err.status = 400;
+          return callback(err);
+        }
+      }
+    }
+  }
+  else if(containsOther){
+    req.body.input = [req.body.input]
+  }
 
 
   return callback();

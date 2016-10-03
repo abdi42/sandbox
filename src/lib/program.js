@@ -36,32 +36,6 @@ Program.prototype.compile = function(callback){
     }
   })
 
-/*
-  var compileErr = null;
-
-  compile.stderr.on('data', (data) => {
-    if(data){
-      compileErr = data;
-    }
-  });
-
-  compile.on('close', (code) => {
-    //Get back to top level directory
-    if(compileErr){
-      process.chdir(topDir);
-      return callback(compileErr);
-    }
-    else if(code == 1){
-      process.chdir(topDir);
-      return callback(compileErr);
-    }
-    else{
-      process.chdir(topDir);
-      return callback(null);
-    }
-  });
-*/
-
 }
 
 var options = {}

@@ -8,7 +8,8 @@ var fs = require("fs");
 var exec = require("child_process").exec;
 var dockerContainer = require("../lib/container.js");
 var eval = require("../lib/eval.js")
+var checkMultiRun = require("../middleware/checkMultiRun.js")
 
-router.post('/',sandbox.create,sandbox.runCode,sandbox.checkCode);
+router.post('/',checkMultiRun,sandbox.create,sandbox.runCode,sandbox.checkCode);
 
 module.exports = router;
