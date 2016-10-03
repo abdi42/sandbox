@@ -16,9 +16,6 @@ module.exports = function(req,res,callback){
           req.body.input = [req.body.input];
         }
       }
-      else{
-        req.body.input = [[" "]]
-      }
     }
   }
 

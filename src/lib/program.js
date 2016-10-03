@@ -4,6 +4,7 @@ var fs = require("fs");
 console.log(topDir);
 var exec = require("child_process").exec;
 var count = 0;
+
 var Program = function(path,lang){
   this.path = path || null;
   this.lang = lang || null;
@@ -63,24 +64,45 @@ Program.prototype.compile = function(callback){
 
 }
 
+var options = {
+  timeout: 10000,
+  killSignal: 'SIGKILL'
+}
+
 Program.prototype.execute = function(cases,callback){
   var program = this;
   var lang = this.lang;
+  var noInput = cases.length == 0
 
   //Go into the folder
   process.chdir(this.path+"/src");
 
-  count = cases.length-1;
+  if(noInput){
+    var execute = exec(lang.execute + lang.fileName+lang.executeExt + " > " + "output/" + index + ".txt",options);
 
-  cases.forEach(function(cases,index){
-    run(lang,index,callback);
-  })
+    execute.stderr.on('data', (data) => {
+      if(data){
+        //Get back to top level directory
+        process.chdir(topDir);
+        execute.kill();
+      }
+    });
 
-}
+    execute.on('close', (code) => {
+      //Get back to top level directory
+      process.chdir(topDir);
+      return callback(null);
+    });
 
-var options = {
-  timeout: 10000,
-  killSignal: 'SIGKILL'
+  }
+  else {
+    count = cases.length-1;
+
+    cases.forEach(function(cases,index){
+      run(lang,index,callback);
+    })
+  }
+
 }
 
 function run(lang,index,callback){
