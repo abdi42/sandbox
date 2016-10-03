@@ -103,6 +103,21 @@ var Sandbox = {
           }
       });
 
+      fs.readFile("temp/"+req.body.dirname+"/executionError.txt","utf8", function(err,data) {
+          if (err) {
+            return;
+          }
+          else{
+
+            removeContainer(req)
+
+            res.status(400).json({
+              status:400,
+              error:data
+            })
+          }
+      });
+
 
       fs.access("temp/"+req.body.dirname+"/completed.txt", fs.F_OK, function(err) {
           if (err) {
