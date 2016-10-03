@@ -73,12 +73,12 @@ Program.prototype.execute = function(cases,callback){
   var program = this;
   var lang = this.lang;
   var noInput = cases.length == 0
-
+  console.log(noInput)
   //Go into the folder
   process.chdir(this.path+"/src");
 
   if(noInput){
-
+    console.log("executing no input")
     var execute = exec(lang.execute + lang.fileName+lang.executeExt + " > " + "output/0.txt",options);
 
     execute.stderr.on('data', (data) => {
