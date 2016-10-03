@@ -13,7 +13,7 @@ program.compile(function(err){
     fs.writeFile("tempDir/compileout.txt",err);
     compileError = true;
   }
-  program.execute(config.data.input,function(err){
+  program.execute(config.data.input,config.timeout,function(err){
     if(err) console.error(err);
 
     var file = {

@@ -64,12 +64,14 @@ Program.prototype.compile = function(callback){
 
 }
 
-var options = {
-  timeout: 10000,
-  killSignal: 'SIGKILL'
-}
+var options = {}
 
-Program.prototype.execute = function(cases,callback){
+Program.prototype.execute = function(cases,timeout,callback){
+  options = {
+    timeout: timeout,
+    killSignal: 'SIGKILL'
+  }
+
   var program = this;
   var lang = this.lang;
   var noInput = cases.length == 0

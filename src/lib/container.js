@@ -42,6 +42,7 @@ exports.createTemps = function(data, callback){
         source: data.source,
         lang: langs[data.lang],
         dirname: data.dirname,
+        timeout:data.timeout,
         data: {
             input: data.input,
             expectedOutput: data.output
