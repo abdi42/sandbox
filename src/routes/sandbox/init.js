@@ -73,5 +73,13 @@ function removeContainer(req,callback){
   })
 }
 
+function evalute(dirname,data,callback){
+  eval.checkFiles("temp/"+dirname+"/src/output",data.expectedOutput,function(err,result){
+    if(err) return callback(err);
+
+    return callback(null,result);
+  })
+}
+
 
 module.exports = router;
