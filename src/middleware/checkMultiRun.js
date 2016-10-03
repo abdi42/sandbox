@@ -12,6 +12,13 @@ module.exports = function(req,res,callback){
     return callback(err)
   }
 
+  if(!req.body.expectedOutput){
+    var err = new Error("expectedOutput not provided")
+    err.status = 400;
+    return callback(err);
+  }
+
+  req.body.output = req.body.expectedOutput
   req.body.input = req.body.testcases;
 
   if(Array.isArray(req.body.input)){
@@ -62,7 +69,6 @@ module.exports = function(req,res,callback){
   }
   else if(containsArray){
     var testcases = req.body.testcases;
-
     for(var i=0;i<testcases.length;i++){
       for(var c=0;c<testcases[i].length;c++){
         if(Array.isArray(testcases[i][c])){
@@ -72,6 +78,11 @@ module.exports = function(req,res,callback){
         }
       }
     }
+
+    if(!req.body.testcases.length == req.body.expectedOutput.length){
+      var err = new Error("the length of testcases must be the same as the expected  output")
+    }
+
   }
   else if(containsOther){
     req.body.input = [req.body.input]
