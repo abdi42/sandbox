@@ -79,13 +79,13 @@ module.exports = function(req,res,callback){
       }
     }
 
-    if(!req.body.testcases.length == req.body.expectedOutput.length){
-      var err = new Error("the length of testcases must be the same as the expected  output")
-    }
-
   }
   else if(containsOther){
     req.body.input = [req.body.input]
+  }
+
+  if(req.body.testcases.length != req.body.expectedOutput.length){
+    var err = new Error("the length of testcases must be the same as the expected  output")
   }
 
 
