@@ -80,7 +80,7 @@ exports.createTemps = function(data, callback){
 
             var file = "temp/" + config.dirname + "/data.json";
             config.source = "";
-
+            console.log(config)
             jsonfile.writeFileSync(file, config, {
                 spaces: 2
             })
