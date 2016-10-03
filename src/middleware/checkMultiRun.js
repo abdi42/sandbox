@@ -62,7 +62,7 @@ module.exports = function(req,res,callback){
   }
   else if(containsArray){
     for(var i=0;i<containsArray.length;i++){
-      for(var c=0;c<containsArray[i];i++){
+      for(var c=0;c<containsArray[i];c++){
         if(Array.isArray(containsArray[i][c])){
           var err = new Error("Incorrect testcases format")
           err.status = 400;
