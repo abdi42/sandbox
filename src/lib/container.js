@@ -37,7 +37,7 @@ exports.createContainer = function(config,callback){
 }
 
 exports.createTemps = function(data, callback){
-
+    console.log(data)
     var config = {
         source: data.source,
         lang: langs[data.lang],
