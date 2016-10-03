@@ -39,7 +39,7 @@ exports.createContainer = function(config,callback){
 exports.createTemps = function(data, callback){
     var config = {
         source: data.source,
-        lang:{}
+        lang:{},
         dirname: data.dirname,
         timeout:data.timeout,
         data: {
