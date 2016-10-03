@@ -85,7 +85,9 @@ module.exports = function(req,res,callback){
   }
 
   if(req.body.testcases.length != req.body.expectedOutput.length){
-    var err = new Error("the length of testcases must be the same as the expected  output")
+    var err = new Error("the length of testcases must be the same as the expected output")
+    err.status = 400;
+    return callback(err);
   }
 
 
