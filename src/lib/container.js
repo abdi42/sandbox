@@ -37,7 +37,6 @@ exports.createContainer = function(config,callback){
 }
 
 exports.createTemps = function(data, callback){
-    console.log(data)
     var config = {
         source: data.source,
         lang: langs[data.lang],
@@ -80,11 +79,13 @@ exports.createTemps = function(data, callback){
 
             var file = "temp/" + config.dirname + "/data.json";
             config.source = "";
-            console.log(config)
+
             jsonfile.writeFileSync(file, config, {
                 spaces: 2
             })
-
+            fs.readFile(file,function(err,data){
+              console.log(data)
+            })
             return callback(null);
 
         })
