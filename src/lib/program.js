@@ -95,7 +95,7 @@ Program.prototype.execute = function(cases,timeout,callback){
       //Get back to top level directory
       if(signal && signal == "SIGKILL"){
         process.chdir(topDir);
-        return callback("program time out!")
+        return callback("Program Timed Out!")
       }
       else{
         process.chdir(topDir);
