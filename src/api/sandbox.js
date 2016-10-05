@@ -103,8 +103,7 @@ var Sandbox = {
 
     },
     getOutput:function(req,res,callback){
-      removeContainer(req);
-      checkStatus(function(err,data){
+      checkStatus(req,function(err,data){
         if(err){
             res.status(400).json({
               status:400,
@@ -152,7 +151,8 @@ function removeContainer(req,callback){
   })
 }
 
-function checkStatus(callback){
+function checkStatus(req,callback){
+  removeContainer(req);
   fs.readFile("temp/"+req.body.dirname+"/compileout.txt","utf8", function(err,data) {
       if (err) {
         return;
