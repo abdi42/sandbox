@@ -103,6 +103,7 @@ var Sandbox = {
 
     },
     getOutput:function(req,res,callback){
+      removeContainer(req);
       checkStatus(function(err,data){
         if(err){
             res.status(400).json({
@@ -157,9 +158,6 @@ function checkStatus(callback){
         return;
       }
       else{
-
-        removeContainer(req)
-
         return callback(data)
       }
   });
@@ -169,9 +167,6 @@ function checkStatus(callback){
         return;
       }
       else{
-
-        removeContainer(req)
-
         return callback(data)
       }
   });
@@ -182,7 +177,6 @@ function checkStatus(callback){
           return;
       }
       else{
-        removeContainer(req)
         var data = fs.readFileSync("temp/" + req.body.dirname + "/src/output/0.txt","utf8");
 
         return callback(null,data)
