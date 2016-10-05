@@ -4,9 +4,13 @@ var codeEval = require("../lib/eval.js")
 var exec = require("child_process").exec;
 var dockerContainer = require("../lib/container.js");
 
+
+//Sandbox object in charge of creating,organizing,and removing containers
 var Sandbox = {
+    //creating & staring docker container
     create: function(req, res, callback) {
-      req.body.dirname = cuid();
+      //generating a random
+      req.body.dirname = cuid.slug();
 
       var config = req.body
       config.image = "coderunner"
