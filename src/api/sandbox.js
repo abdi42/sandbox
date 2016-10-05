@@ -1,4 +1,3 @@
-var filesystem = require("../lib/filesystem.js");
 var cuid = require("cuid");
 var fs = require("fs");
 var codeEval = require("../lib/eval.js")
