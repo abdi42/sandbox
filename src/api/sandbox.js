@@ -103,56 +103,23 @@ var Sandbox = {
 
     },
     getOutput:function(req,res,callback){
-      fs.readFile("temp/"+req.body.dirname+"/compileout.txt","utf8", function(err,data) {
-          if (err) {
-            return;
-          }
-          else{
-
-            removeContainer(req)
-
+      checkStatus(function(err,data){
+        if(err){
             res.status(400).json({
               status:400,
               error:data
             })
-          }
-      });
+        }
+        else{
+          var outputArr = data.split("\n");
+          req.body.output = outputArr;
 
-      fs.readFile("temp/"+req.body.dirname+"/executionError.txt","utf8", function(err,data) {
-          if (err) {
-            return;
-          }
-          else{
-
-            removeContainer(req)
-
-            res.status(400).json({
-              status:400,
-              error:data
-            })
-          }
-      });
-
-
-      fs.access("temp/"+req.body.dirname+"/completed.txt", fs.F_OK, function(err) {
-          if (err) {
-              return;
-          }
-          else{
-            removeContainer(req)
-
-            var data = fs.readFileSync("temp/" + req.body.dirname + "/src/output/0.txt","utf8");
-            var outputArr = data.split("\n");
-            req.body.output = outputArr;
-
-            res.json({
-              status:200,
-              output:req.body.output
-            })
-
-          }
-      });
-
+          res.json({
+            status:200,
+            output:req.body.output
+          })
+        }
+      })
     },
     remove:function(req,res,callback){
         dockerhttp.post("/containers/"+req.body.containerId+"/stop",{},function(err){
@@ -182,6 +149,45 @@ function removeContainer(req,callback){
       dockerhttp.delete("/containers/"+req.body.containerId,{},function(err){
       })
   })
+}
+
+function checkStatus(callback){
+  fs.readFile("temp/"+req.body.dirname+"/compileout.txt","utf8", function(err,data) {
+      if (err) {
+        return;
+      }
+      else{
+
+        removeContainer(req)
+
+        return callback(data)
+      }
+  });
+
+  fs.readFile("temp/"+req.body.dirname+"/executionError.txt","utf8", function(err,data) {
+      if (err) {
+        return;
+      }
+      else{
+
+        removeContainer(req)
+
+        return callback(data)
+      }
+  });
+
+
+  fs.access("temp/"+req.body.dirname+"/completed.txt", fs.F_OK, function(err) {
+      if (err) {
+          return;
+      }
+      else{
+        removeContainer(req)
+        var data = fs.readFileSync("temp/" + req.body.dirname + "/src/output/0.txt","utf8");
+
+        return callback(null,data)
+      }
+  });
 }
 
 
