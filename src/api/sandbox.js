@@ -107,7 +107,7 @@ var Sandbox = {
         if(err){
             res.status(400).json({
               status:400,
-              error:data
+              error:err
             })
         }
         else{
