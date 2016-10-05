@@ -42,65 +42,33 @@ var Sandbox = {
       })
     },
     checkCode:function(req,res,callback){
-      done = false;
+      checkStatus(req,function(err,data){
+        if(err){
+            res.status(400).json({
+              status:400,
+              error:err
+            })
+        }
+        else{
+          evalute(req.body.dirname,{
+            input:req.body.input,
+            expectedOutput:req.body.output
+          },function(err,result){
 
-      fs.readFile("temp/"+req.body.dirname+"/compileout.txt","utf8", function(err,data) {
-          if (err) {
-            return;
-          }
-          else{
+            if(err) return callback(err);
 
             removeContainer(req)
 
-            res.status(400).json({
-              status:400,
-              error:data
-            })
-          }
-      });
+            req.body.result = result;
 
-      fs.readFile("temp/"+req.body.dirname+"/executionError.txt","utf8", function(err,data) {
-          if (err) {
-            return;
-          }
-          else{
-
-            removeContainer(req)
-
-            res.status(400).json({
-              status:400,
-              error:data
-            })
-          }
-      });
-
-
-      fs.access("temp/"+req.body.dirname+"/completed.txt", fs.F_OK, function(err) {
-          if (err) {
-              return;
-          }
-          else{
-            evalute(req.body.dirname,{
-              input:req.body.input,
-              expectedOutput:req.body.output
-            },function(err,result){
-
-              if(err) return callback(err);
-
-              removeContainer(req)
-
-              req.body.result = result;
-
-              res.json({
-                status:200,
-                result:req.body.result
-              })
-
+            res.json({
+              status:200,
+              result:req.body.result
             })
 
-          }
-      });
-
+          })
+        }
+      })
     },
     getOutput:function(req,res,callback){
       checkStatus(req,function(err,data){
