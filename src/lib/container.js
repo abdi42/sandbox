@@ -140,3 +140,10 @@ exports.update = function (data,callback){
   })
 
 }
+
+exports.removeContainer = function (req,callback){
+  dockerhttp.post("/containers/"+req.body.containerId+"/stop",{},function(err){
+      dockerhttp.delete("/containers/"+req.body.containerId,{},function(err){
+      })
+  })
+}

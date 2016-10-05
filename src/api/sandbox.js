@@ -1,10 +1,7 @@
-var dockerhttp = require("../lib/dockerhttp.js");
 var filesystem = require("../lib/filesystem.js");
-var jsonfile = require("jsonfile");
-var langs = require("../lib/langs.js");
 var cuid = require("cuid");
 var fs = require("fs");
-var eval = require("../lib/eval.js")
+var codeEval = require("../lib/eval.js")
 var exec = require("child_process").exec;
 var dockerContainer = require("../lib/container.js");
 
@@ -57,8 +54,6 @@ var Sandbox = {
 
             if(err) return callback(err);
 
-            removeContainer(req)
-
             req.body.result = result;
 
             res.json({
@@ -88,23 +83,11 @@ var Sandbox = {
           })
         }
       })
-    },
-    remove:function(req,res,callback){
-        dockerhttp.post("/containers/"+req.body.containerId+"/stop",{},function(err){
-            if(err) return callback(err);
-
-            dockerhttp.delete("/containers/"+req.body.containerId,{},function(err){
-              if(err)
-                res.status(500).send(stderr)
-
-              res.json(req.body);
-            })
-        })
     }
 }
 
 function evalute(dirname,data,callback){
-  eval.checkFiles("temp/"+dirname+"/src/output",data.expectedOutput,function(err,result){
+  codeEval.checkFiles("temp/"+dirname+"/src/output",data.expectedOutput,function(err,result){
     if(err) return callback(err);
 
     return callback(null,result);
@@ -112,15 +95,8 @@ function evalute(dirname,data,callback){
 }
 
 
-function removeContainer(req,callback){
-  dockerhttp.post("/containers/"+req.body.containerId+"/stop",{},function(err){
-      dockerhttp.delete("/containers/"+req.body.containerId,{},function(err){
-      })
-  })
-}
-
 function checkStatus(req,callback){
-  //removeContainer(req);
+  dockerContainer.removeContainer(req);
   fs.readFile("temp/"+req.body.dirname+"/compileout.txt","utf8", function(err,data) {
       if (err) {
         return;
