@@ -80,12 +80,10 @@ module.exports = function(req,res,callback){
     }
 
     for(var i=0;i<testcases.length;i++){
-      for(var c=0;c<testcases[i].length;c++){
-        if(testcases[i][c].length == 0){
-          var err = new Error("One or more testcases are empty")
-          err.status = 400;
-          return callback(err)
-        }
+      if(testcases[i].length == 0){
+        var err = new Error("One or more testcases are empty")
+        err.status = 400;
+        return callback(err)
       }
     }
 
