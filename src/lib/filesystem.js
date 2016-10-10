@@ -12,9 +12,6 @@ exports.createFile = function(files,callback){
     if(!file.path){
       return callback(new Error("file path not specified"))
     }
-    else if(!file.data){
-      return callback(new Error("file data not specified"))
-    }
     try {
       //Creating a file synchronously
       fs.writeFileSync(file.path, file.data, 'utf8');

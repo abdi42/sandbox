@@ -36,11 +36,11 @@ exports.createContainer = function(config,callback){
 }
 
 exports.createTemps = function(data, callback){
-
     var config = {
         source: data.source,
         lang: langs[data.lang],
         dirname: data.dirname,
+        timeout:data.timeout,
         data: {
             input: data.input,
             expectedOutput: data.output
@@ -82,7 +82,6 @@ exports.createTemps = function(data, callback){
             jsonfile.writeFileSync(file, config, {
                 spaces: 2
             })
-
             return callback(null);
 
         })
@@ -112,6 +111,7 @@ exports.update = function (data,callback){
     source:data.source,
     lang:langs[data.lang],
     dirname:data.dirname,
+    timeout:data.timeout,
     data: {
         input: data.input,
         expectedOutput: data.output
@@ -138,6 +138,13 @@ exports.update = function (data,callback){
     return callback(null);
   })
 
+}
+
+exports.removeContainer = function (req,callback){
+  dockerhttp.post("/containers/"+req.body.containerId+"/stop",{},function(err){
+      dockerhttp.delete("/containers/"+req.body.containerId,{},function(err){
+      })
+  })
 }
 
 function createDirectories(directories,callback){
@@ -188,4 +195,5 @@ function createFiles(files,callback){
   asyncUtil.parallel(createFiles,function(err, results) {
       return callback(err);
   });
+
 }

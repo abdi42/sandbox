@@ -1,16 +1,16 @@
-var dockerhttp = require("../lib/dockerhttp.js");
-var filesystem = require("../lib/filesystem.js");
-var jsonfile = require("jsonfile");
-var langs = require("../lib/langs.js");
 var cuid = require("cuid");
 var fs = require("fs");
-var eval = require("../lib/eval.js")
+var codeEval = require("../lib/eval.js")
 var exec = require("child_process").exec;
 var dockerContainer = require("../lib/container.js");
 
+
+//Sandbox object in charge of creating,organizing,and removing containers
 var Sandbox = {
+    //creating & staring docker container
     create: function(req, res, callback) {
-      req.body.dirname = cuid();
+      //generating a random
+      req.body.dirname = cuid.slug();
 
       var config = req.body
       config.image = "coderunner"
@@ -42,104 +42,55 @@ var Sandbox = {
       })
     },
     checkCode:function(req,res,callback){
-      done = false;
-
-      fs.readFile("temp/"+req.body.dirname+"/compileout.txt","utf8", function(err,data) {
-          if (err) {
-            return;
-          }
-          else{
-
-            removeContainer(req)
-
+      checkStatus(req,function(err,data){
+        if(err){
             res.status(400).json({
               status:400,
-              error:data
+              error:err
             })
-          }
-      });
+        }
+        else{
+          evalute(req.body.dirname,{
+            input:req.body.input,
+            expectedOutput:req.body.output
+          },function(err,result){
 
+            if(err) return callback(err);
 
-      fs.access("temp/"+req.body.dirname+"/completed.txt", fs.F_OK, function(err) {
-          if (err) {
-              return;
-          }
-          else{
-            evalute(req.body.dirname,{
-              input:req.body.input,
-              expectedOutput:req.body.output
-            },function(err,result){
-
-              if(err) return callback(err);
-
-              removeContainer(req)
-
-              req.body.result = result;
-
-              res.json({
-                status:200,
-                result:req.body.result
-              })
-
-            })
-
-          }
-      });
-
-    },
-    getOutput:function(req,res,callback){
-      fs.readFile("temp/"+req.body.dirname+"/compileout.txt","utf8", function(err,data) {
-          if (err) {
-            return;
-          }
-          else{
-
-            removeContainer(req)
-
-            res.status(400).json({
-              status:400,
-              error:data
-            })
-          }
-      });
-
-
-      fs.access("temp/"+req.body.dirname+"/completed.txt", fs.F_OK, function(err) {
-          if (err) {
-              return;
-          }
-          else{
-            removeContainer(req)
-
-            var data = fs.readFileSync("temp/" + req.body.dirname + "/src/output/0.txt","utf8");
-            var outputArr = data.split("\n");
-            req.body.output = outputArr;
+            req.body.result = result;
 
             res.json({
               status:200,
-              output:req.body.output
+              result:req.body.result
             })
 
-          }
-      });
-
+          })
+        }
+      })
     },
-    remove:function(req,res,callback){
-        dockerhttp.post("/containers/"+req.body.containerId+"/stop",{},function(err){
-            if(err) return callback(err);
-
-            dockerhttp.delete("/containers/"+req.body.containerId,{},function(err){
-              if(err)
-                res.status(500).send(stderr)
-
-              res.json(req.body);
+    getOutput:function(req,res,callback){
+      checkStatus(req,function(err,data){
+        if(err){
+            res.status(400).json({
+              status:400,
+              error:err
             })
-        })
+        }
+        else{
+          var outputArr = data.split("\n");
+          req.body.output = outputArr;
+
+          res.json({
+            status:200,
+            output:req.body.output
+          })
+        }
+      })
     }
 }
 
 function evalute(dirname,data,callback){
-  eval.checkFiles("temp/"+dirname+"/src/output",data.expectedOutput,function(err,result){
+  codeEval.checkFiles("temp/"+dirname+"/src/output",data.expectedOutput,function(err,result){
     if(err) return callback(err);
 
     return callback(null,result);
@@ -147,11 +98,37 @@ function evalute(dirname,data,callback){
 }
 
 
-function removeContainer(req,callback){
-  dockerhttp.post("/containers/"+req.body.containerId+"/stop",{},function(err){
-      dockerhttp.delete("/containers/"+req.body.containerId,{},function(err){
-      })
-  })
+function checkStatus(req,callback){
+  dockerContainer.removeContainer(req);
+  fs.readFile("temp/"+req.body.dirname+"/compileout.txt","utf8", function(err,data) {
+      if (err) {
+        return;
+      }
+      else{
+        return callback(data)
+      }
+  });
+
+  fs.readFile("temp/"+req.body.dirname+"/executionError.txt","utf8", function(err,data) {
+      if (err) {
+        return;
+      }
+      else{
+        return callback(data)
+      }
+  });
+
+
+  fs.access("temp/"+req.body.dirname+"/completed.txt", fs.F_OK, function(err) {
+      if (err) {
+          return;
+      }
+      else{
+        var data = fs.readFileSync("temp/" + req.body.dirname + "/src/output/0.txt","utf8");
+
+        return callback(null,data)
+      }
+  });
 }
 
 

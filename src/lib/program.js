@@ -4,6 +4,7 @@ var fs = require("fs");
 console.log(topDir);
 var exec = require("child_process").exec;
 var count = 0;
+
 var Program = function(path,lang){
   this.path = path || null;
   this.lang = lang || null;
@@ -35,52 +36,56 @@ Program.prototype.compile = function(callback){
     }
   })
 
-/*
-  var compileErr = null;
-
-  compile.stderr.on('data', (data) => {
-    if(data){
-      compileErr = data;
-    }
-  });
-
-  compile.on('close', (code) => {
-    //Get back to top level directory
-    if(compileErr){
-      process.chdir(topDir);
-      return callback(compileErr);
-    }
-    else if(code == 1){
-      process.chdir(topDir);
-      return callback(compileErr);
-    }
-    else{
-      process.chdir(topDir);
-      return callback(null);
-    }
-  });
-*/
-
 }
 
-Program.prototype.execute = function(cases,callback){
+var options = {}
+
+Program.prototype.execute = function(cases,timeout,callback){
+  options = {
+    timeout: timeout,
+    killSignal: 'SIGKILL'
+  }
+
   var program = this;
   var lang = this.lang;
-
+  var noInput = cases.length == 0
+  console.log(noInput)
   //Go into the folder
   process.chdir(this.path+"/src");
 
-  count = cases.length-1;
+  if(noInput){
+    console.log("executing no input")
+    var execute = exec(lang.execute + lang.fileName+lang.executeExt + " > " + "output/0.txt",options);
 
-  cases.forEach(function(cases,index){
-    run(lang,index,callback);
-  })
+    execute.stderr.on('data', (data) => {
+      if(data){
+        //Get back to top level directory
+        process.chdir(topDir);
+        execute.kill();
+      }
+    });
 
-}
+    execute.on('close', (code,signal) => {
+      //Get back to top level directory
+      if(signal && signal == "SIGKILL"){
+        process.chdir(topDir);
+        return callback("Program Timed Out!")
+      }
+      else{
+        process.chdir(topDir);
+        return callback(null);
+      }
+    });
 
-var options = {
-  timeout: 10000,
-  killSignal: 'SIGKILL'
+  }
+  else {
+    count = cases.length-1;
+
+    cases.forEach(function(cases,index){
+      run(lang,index,callback);
+    })
+  }
+
 }
 
 function run(lang,index,callback){
