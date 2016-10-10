@@ -3,6 +3,7 @@ var jsonfile = require("jsonfile");
 var langs = require("./langs.js");
 var fs = require("fs")
 var cuid = require("cuid");
+var asyncUtil = rueqire("async");
 
 exports.createContainer = function(config,callback){
     var containerOpts = {
