@@ -1,5 +1,4 @@
 var dockerhttp = require("./dockerhttp.js");
-var filesystem = require("./filesystem.js");
 var jsonfile = require("jsonfile");
 var langs = require("./langs.js");
 var fs = require("fs")
@@ -72,9 +71,9 @@ exports.createTemps = function(data, callback){
         })
     }
 
-    filesystem.createDirectory(folders, function(err) {
+    createDirectories(folders, function(err) {
         if (err) return callback(err);
-        filesystem.createFile(files, function(err) {
+        createFiles(files, function(err) {
             if (err) return callback(err)
 
             var file = "temp/" + config.dirname + "/data.json";
@@ -126,7 +125,7 @@ exports.update = function (data,callback){
     }
   ]
 
-  filesystem.createFile(files,function(err){
+  createFiles(files,function(err){
     if(err) return callback(err)
 
     var file = "temp/" + config.dirname + "/data.json";
@@ -139,4 +138,54 @@ exports.update = function (data,callback){
     return callback(null);
   })
 
+}
+
+function createDirectories(directories,callback){
+  if(directories.length == 0){
+    return callback(new Error("directories not specified"));
+  }
+  //loop throught directories array and create directory specified
+  for(var i=0;i<directories.length;i++){
+    var directory = directories[i];
+    if(!directory.path){
+      return callback(new Error("directory path not specified"))
+    }
+    try {
+      //Creating a directory synchronously
+      fs.mkdirSync(directory.path);
+    } catch (err) {
+      console.error(err);
+      return callback(err);
+    }
+  }
+
+  return callback(null);
+}
+
+function createFiles(files,callback){
+  if(files.length == 0){
+    return callback(new Error("files not specified"))
+  }
+
+  for(var i=0;i<files.length;i++){
+    (function(i){
+      var file = files[i]
+      if(!file.path){
+        return callback(new Error("file path not specified"))
+      }
+      else if(!file.data){
+        return callback(new Error("file data not specified"))
+      }
+      createFiles.push(function(callback){
+        fs.writeFile(file.path, file.data, 'utf8',function(err){
+          if(err) return callback(err)
+          callback(null)
+        })
+      })
+    })(i)
+  }
+
+  asyncUtil.parallel(createFiles,function(err, results) {
+      return callback(err);
+  });
 }
