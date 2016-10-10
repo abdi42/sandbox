@@ -170,6 +170,7 @@ function createDirectories(directories,callback){
 }
 
 function createFiles(files,callback){
+  var createFiles = [];
   if(files.length == 0){
     return callback(new Error("files not specified"))
   }
