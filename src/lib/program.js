@@ -40,7 +40,7 @@ Program.prototype.compile = function(callback){
 
 var options = {}
 
-Program.prototype.execute = function(cases,timeout,callback){
+Program.prototype.execute = function(inputs,timeout,callback){
   options = {
     timeout: timeout,
     killSignal: 'SIGKILL'
@@ -48,43 +48,15 @@ Program.prototype.execute = function(cases,timeout,callback){
 
   var program = this;
   var lang = this.lang;
-  var noInput = cases.length == 0
-  console.log(noInput)
+
   //Go into the folder
   process.chdir(this.path+"/src");
 
-  if(noInput){
-    console.log("executing no input")
-    var execute = exec(lang.execute + lang.fileName+lang.executeExt + " > " + "output/0.txt",options);
+  count = cases.length-1;
 
-    execute.stderr.on('data', (data) => {
-      if(data){
-        //Get back to top level directory
-        process.chdir(topDir);
-        execute.kill();
-      }
-    });
-
-    execute.on('close', (code,signal) => {
-      //Get back to top level directory
-      if(signal && signal == "SIGKILL"){
-        process.chdir(topDir);
-        return callback("Program Timed Out!")
-      }
-      else{
-        process.chdir(topDir);
-        return callback(null);
-      }
-    });
-
-  }
-  else {
-    count = cases.length-1;
-
-    cases.forEach(function(cases,index){
-      run(lang,index,callback);
-    })
-  }
+  inputs.forEach(function(input,index){
+    run(lang,index,callback);
+  })
 
 }
 
