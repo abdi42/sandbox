@@ -6,14 +6,27 @@ module.exports = function(req,res,callback){
     req.body.timeout = 3000;
   }
 
-  for(var i=0;i<req.body.testcases.lenght;i++){
+  req.body.input = [];
+  req.body.output = [];
+
+  for(var i=0;i<req.body.testcases.length;i++){
     if(req.body.testcases[i].input.length > 0){
-      req.body.inputs.push(req.body.testcases[i])
+      req.body.input.push(req.body.testcases[i])
     }
     else{
-      req.body.inputs.push([""]);
+      req.body.input.push([""]);
+    }
+    
+    if(req.body.testcases[i].expectedOutput.length > 0){
+      req.body.output.push(req.body.testcases[i].expectedOutput)  
+    }
+    else{
+      req.body.output.push([""]);
     }
   }
+  
+  console.log(req.body.inputs,req.body.output)
+  
 
   return callback();
 }
