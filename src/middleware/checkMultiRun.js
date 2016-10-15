@@ -14,14 +14,14 @@ module.exports = function(req,res,callback){
       req.body.input.push(req.body.testcases[i].input)
     }
     else{
-      req.body.input.push([""]);
+      req.body.input.push([null]);
     }
     
     if(req.body.testcases[i].expectedOutput.length > 0){
       req.body.output.push(req.body.testcases[i].expectedOutput)  
     }
     else{
-      req.body.output.push([""]);
+      req.body.output.push([null]);
     }
   }
   
