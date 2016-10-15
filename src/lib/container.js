@@ -64,17 +64,19 @@ exports.createTemps = function(data, callback){
     }]
 
     for (var i = 0; i < config.data.input.length; i++) {
-        var inputStr = config.data.input[i].join('\n');
-
-        files.push({
-            path: "temp/" + config.dirname + "/src/input/" + i + ".txt",
-            data: inputStr
-        })
+        if(config.data.input[i][0] != null){
+          var inputStr = config.data.input[i].join('\n');
+          
+          files.push({
+              path: "temp/" + config.dirname + "/src/input/" + i + ".txt",
+              data: inputStr
+          })
+        }
     }
 
     createDirectories(folders, function(err) {
         if (err) return callback(err);
-        createFiles(files, function(err) {
+        createFilesAsync(files, function(err) {
             if (err) return callback(err)
 
             var file = "temp/" + config.dirname + "/data.json";
@@ -99,6 +101,7 @@ exports.containerExec = function (containerId,commands,callback){
     }
 
     dockerhttp.post("/containers/"+containerId+"/exec",execOpts,function(err,body){
+        if(err) return callback(err)
         dockerhttp.post("/exec/"+body.Id+"/start",{ Detach: false,Tty: false },function(err){
             if(err) return callback(err)
 
@@ -126,7 +129,7 @@ exports.update = function (data,callback){
     }
   ]
 
-  createFiles(files,function(err){
+  createFilesAsync(files,function(err){
     if(err) return callback(err)
 
     var file = "temp/" + config.dirname + "/data.json";
@@ -170,11 +173,12 @@ function createDirectories(directories,callback){
   return callback(null);
 }
 
-function createFiles(files,callback){
+function createFilesAsync(files,callback){
   var createFiles = [];
   if(files.length == 0){
     return callback(new Error("files not specified"))
   }
+
 
   for(var i=0;i<files.length;i++){
     (function(i){
