@@ -69,7 +69,7 @@ var Sandbox = {
       })
     },
     getOutput:function(req,res,callback){
-      checkStatus(req,function(err,data){
+      checkStatus(req,function(err){
         if(err){
             res.status(400).json({
               status:400,
@@ -77,6 +77,8 @@ var Sandbox = {
             })
         }
         else{
+          var data = fs.readFileSync("temp/" + req.body.dirname + "/src/output/0.txt","utf8");
+          
           var outputArr = data.split("\n");
           req.body.output = outputArr;
 
@@ -124,9 +126,7 @@ function checkStatus(req,callback){
           return;
       }
       else{
-        var data = fs.readFileSync("temp/" + req.body.dirname + "/src/output/0.txt","utf8");
-
-        return callback(null,data)
+        return callback(null)
       }
   });
 }
