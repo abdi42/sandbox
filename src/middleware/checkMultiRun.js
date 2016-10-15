@@ -11,7 +11,7 @@ module.exports = function(req,res,callback){
 
   for(var i=0;i<req.body.testcases.length;i++){
     if(req.body.testcases[i].input.length > 0){
-      req.body.input.push(req.body.testcases[i])
+      req.body.input.push(req.body.testcases[i].input)
     }
     else{
       req.body.input.push([""]);
