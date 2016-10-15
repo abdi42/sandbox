@@ -52,7 +52,7 @@ Program.prototype.execute = function(inputs,timeout,callback){
   //Go into the folder
   process.chdir(this.path+"/src");
 
-  count = cases.length-1;
+  count = inputs.length-1;
 
   inputs.forEach(function(input,index){
     run(lang,index,callback);
