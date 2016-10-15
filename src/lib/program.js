@@ -55,15 +55,18 @@ Program.prototype.execute = function(inputs,timeout,callback){
   count = inputs.length-1;
 
   inputs.forEach(function(input,index){
-    run(lang,index,callback);
+    run(input,lang,index,callback);
   })
 
 }
 
-function run(lang,index,callback){
+function run(input,lang,index,callback){
   //spawn new process
-  var execute = exec(lang.execute + lang.fileName+lang.executeExt + " < " + "input/" + index + ".txt" + " > " + "output/" + index + ".txt",options);
-
+  if(input.length > 0)
+    var execute = exec(lang.execute + lang.fileName+lang.executeExt + " < " + "input/" + index + ".txt" + " > " + "output/" + index + ".txt",options);
+  else
+    var execute = exec(lang.execute + lang.fileName+lang.executeExt + " > " + "output/" + index + ".txt",options);
+    
   execute.stderr.on('data', (data) => {
     if(data){
       //Get back to top level directory
