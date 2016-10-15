@@ -25,7 +25,7 @@ module.exports = function(req,res,callback){
     }
   }
   
-  console.log(req.body.inputs,req.body.output)
+  console.log(req.body.input,req.body.output)
   
 
   return callback();
