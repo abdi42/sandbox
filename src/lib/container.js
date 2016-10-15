@@ -182,9 +182,7 @@ function createFiles(files,callback){
       if(!file.path){
         return callback(new Error("file path not specified"))
       }
-      else if(!file.data){
-        return callback(new Error("file data not specified"))
-      }
+
       createFiles.push(function(callback){
         fs.writeFile(file.path, file.data, 'utf8',function(err){
           if(err) return callback(err)
