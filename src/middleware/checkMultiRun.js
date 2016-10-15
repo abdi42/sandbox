@@ -25,8 +25,18 @@ module.exports = function(req,res,callback){
     }
   }
   
-  console.log(req.body.input,req.body.output)
-  
+  if(!req.body.source.length > 0){
+    var err = new Error("Source code empty");
+    err.status = 400;
+    return callback(err);
+  }
+
+  if(!langs[req.body.lang]){
+    var err = new Error("Unknown language provided");
+    err.status = 400;
+    return callback(err)
+  }
+
 
   return callback();
 }
