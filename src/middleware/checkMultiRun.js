@@ -6,6 +6,12 @@ module.exports = function(req,res,callback){
     req.body.timeout = 3000;
   }
 
+  if(!req.body.testcases){
+    var err = new Error("testcases not specified");
+    err.status = 400;
+    return callback(err);
+  }
+
   req.body.input = [];
   req.body.output = [];
 
