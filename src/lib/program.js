@@ -63,12 +63,12 @@ Program.prototype.execute = function(inputs,timeout,callback){
 function run(input,lang,index,callback){
   //spawn new process
   console.log(input,input.length);
-  
+
   if(input[0] != null)
     var execute = exec(lang.execute + lang.fileName+lang.executeExt + " < " + "input/" + index + ".txt" + " > " + "output/" + index + ".txt",options);
   else
     var execute = exec(lang.execute + lang.fileName+lang.executeExt + " > " + "output/" + index + ".txt",options);
-    
+
   execute.stderr.on('data', (data) => {
     if(data){
       //Get back to top level directory
