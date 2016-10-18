@@ -2,7 +2,7 @@ var sandbox = require("./api/sandbox.js")
 var kue = require('kue')
  , queue = kue.createQueue();
 
-queue.process('singleRun', function(job, done){
+queue.process('singleRun',25, function(job, done){
   singleRun(job.data);
 });
 
@@ -12,7 +12,7 @@ function singleRun(jobData){
     if(err) return done(err);
     sandbox.runCode(data,function(err,data){
       if(err) return done(err);
-      sandbox.checkCode(data,function(err,data){
+      sandbox.getOutput(data,function(err,data){
         if(err) return done(err);
 
         done(null,data.output)
