@@ -12,7 +12,6 @@ var Sandbox = {
       //generating a random
       data.dirname = cuid.slug();
 
-      console.log(data);
       dockerContainer.createTemps(data, function(err) {
           if (err) return callback(err)
 
