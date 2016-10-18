@@ -12,14 +12,15 @@ var Sandbox = {
       //generating a random
       data.dirname = cuid.slug();
 
-      var containerConfig = data;
-      containerConfig.image = "coderunner"
-      containerConfig.volume = "/codetree/tempDir"
-      containerConfig.binds = ["/home/abdullahimahamed0987/sandbox/temp/" + containerConfig.dirname + ":/codetree/tempDir:rw"]
-      containerConfig.commands = ['/bin/bash']
       console.log(data);
       dockerContainer.createTemps(data, function(err) {
           if (err) return callback(err)
+
+          var containerConfig = data;
+          containerConfig.image = "coderunner"
+          containerConfig.volume = "/codetree/tempDir"
+          containerConfig.binds = ["/home/abdullahimahamed0987/sandbox/temp/" + containerConfig.dirname + ":/codetree/tempDir:rw"]
+          containerConfig.commands = ['/bin/bash']
 
           dockerContainer.createContainer(containerConfig,function(err, containerId) {
               if (err) return callback(err);
