@@ -17,7 +17,7 @@ var Sandbox = {
       containerConfig.volume = "/codetree/tempDir"
       containerConfig.binds = ["/home/abdullahimahamed0987/sandbox/temp/" + containerConfig.dirname + ":/codetree/tempDir:rw"]
       containerConfig.commands = ['/bin/bash']
-
+      console.log(data);
       dockerContainer.createTemps(data, function(err) {
           if (err) return callback(err)
 

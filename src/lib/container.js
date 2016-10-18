@@ -62,7 +62,7 @@ exports.createTemps = function(data, callback){
         path: "temp/" + config.dirname + "/src/" + config.lang.fileName + config.lang.compileExt,
         data: config.source
     }]
-
+    
     for (var i = 0; i < config.data.input.length; i++) {
         if(config.data.input[i][0] != null){
           var inputStr = config.data.input[i].join('\n');
