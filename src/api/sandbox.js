@@ -8,84 +8,72 @@ var dockerContainer = require("../lib/container.js");
 //Sandbox object in charge of creating,organizing,and removing containers
 var Sandbox = {
     //creating & staring docker container
-    create: function(req, res, callback) {
+    create: function(data, callback) {
       //generating a random
-      req.body.dirname = cuid.slug();
+      data.dirname = cuid.slug();
 
-      var containerConfig = req.body
+      var containerConfig = data;
       containerConfig.image = "coderunner"
       containerConfig.volume = "/codetree/tempDir"
       containerConfig.binds = ["/home/abdullahimahamed0987/sandbox/temp/" + containerConfig.dirname + ":/codetree/tempDir:rw"]
       containerConfig.commands = ['/bin/bash']
 
-      dockerContainer.createTemps(req.body, function(err) {
+      dockerContainer.createTemps(data, function(err) {
           if (err) return callback(err)
 
           dockerContainer.createContainer(containerConfig,function(err, containerId) {
               if (err) return callback(err);
 
-              req.body.containerId = containerId;
+              data.containerId = containerId;
 
-              return callback();
+              return callback(null,data);
           })
       })
     },
-    runCode:function(req,res,callback){
-      dockerContainer.update(req.body,function(err){
+    runCode:function(data,callback){
+      dockerContainer.update(data,function(err){
           if(err) return callback(err)
 
-          dockerContainer.containerExec(req.body.containerId,['node','app.js'],function(err){
+          dockerContainer.containerExec(data.containerId,['node','app.js'],function(err){
               if(err) return callback(err)
 
-              return callback();
+              return callback(null,data);
           })
       })
     },
-    checkCode:function(req,res,callback){
-      checkStatus(req,function(err,data){
+    checkCode:function(data,callback){
+      checkStatus(data,function(err,data){
         if(err){
-            res.status(400).json({
-              status:400,
-              error:err
-            })
+            return callback(err);
         }
         else{
-          evalute(req.body.dirname,{
-            input:req.body.input,
-            expectedOutput:req.body.output
+          evalute(data.dirname,{
+            input:data.input,
+            expectedOutput:data.output
           },function(err,result){
 
             if(err) return callback(err);
 
-            req.body.result = result;
+            data.result = result;
 
-            res.json({
-              status:200,
-              result:req.body.result
-            })
+            return callback(null,data)
 
           })
         }
       })
     },
-    getOutput:function(req,res,callback){
-      checkStatus(req,function(err){
+    getOutput:function(data,callback){
+      checkStatus(data,function(err){
         if(err){
-            res.status(400).json({
-              status:400,
-              error:err
-            })
+            return callback(err);
         }
         else{
-          var data = fs.readFileSync("temp/" + req.body.dirname + "/src/output/0.txt","utf8");
-          
-          var outputArr = data.split("\n");
-          req.body.output = outputArr;
+          var fileData = fs.readFileSync("temp/" + data.dirname + "/src/output/0.txt","utf8");
 
-          res.json({
-            status:200,
-            output:req.body.output
-          })
+          var outputArr = fileData.split("\n");
+          data.output = outputArr;
+
+          return callback(null,data);
         }
       })
     }
@@ -100,28 +88,28 @@ function evalute(dirname,data,callback){
 }
 
 
-function checkStatus(req,callback){
-  dockerContainer.removeContainer(req);
-  fs.readFile("temp/"+req.body.dirname+"/compileout.txt","utf8", function(err,data) {
+function checkStatus(data,callback){
+  dockerContainer.removeContainer(data);
+  fs.readFile("temp/"+data.dirname+"/compileout.txt","utf8", function(err,fileData) {
       if (err) {
         return;
       }
       else{
-        return callback(data)
+        return callback(fileData)
       }
   });
 
-  fs.readFile("temp/"+req.body.dirname+"/executionError.txt","utf8", function(err,data) {
+  fs.readFile("temp/"+data.dirname+"/executionError.txt","utf8", function(err,fileData) {
       if (err) {
         return;
       }
       else{
-        return callback(data)
+        return callback(fileData)
       }
   });
 
 
-  fs.access("temp/"+req.body.dirname+"/completed.txt", fs.F_OK, function(err) {
+  fs.access("temp/"+data.dirname+"/completed.txt", fs.F_OK, function(err) {
       if (err) {
           return;
       }
