@@ -2,7 +2,7 @@ var sandbox = require("./api/sandbox.js")
 var kue = require('kue')
  , queue = kue.createQueue();
 
-queue.process('singleRun', 25, function(job, done){
+queue.process('singleRun', function(job, done){
   singleRun(job.data);
 });
 
