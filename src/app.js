@@ -3,6 +3,7 @@ var kue = require('kue')
  , queue = kue.createQueue();
 
 queue.process('singleRun',25, function(job, done){
+  console.log("Running singleRun")
   singleRun(job.data,done);
 });
 
