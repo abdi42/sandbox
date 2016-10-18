@@ -66,7 +66,7 @@ exports.createTemps = function(data, callback){
     for (var i = 0; i < config.data.input.length; i++) {
         if(config.data.input[i][0] != null){
           var inputStr = config.data.input[i].join('\n');
-          
+
           files.push({
               path: "temp/" + config.dirname + "/src/input/" + i + ".txt",
               data: inputStr
@@ -144,9 +144,9 @@ exports.update = function (data,callback){
 
 }
 
-exports.removeContainer = function (req,callback){
-  dockerhttp.post("/containers/"+req.body.containerId+"/stop",{},function(err){
-      dockerhttp.delete("/containers/"+req.body.containerId,{},function(err){
+exports.removeContainer = function (data,callback){
+  dockerhttp.post("/containers/"+data.containerId+"/stop",{},function(err){
+      dockerhttp.delete("/containers/"+data.containerId,{},function(err){
       })
   })
 }

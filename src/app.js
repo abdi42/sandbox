@@ -20,3 +20,15 @@ function singleRun(jobData){
     })
   })
 }
+
+
+var kue = require('kue')
+var queue = kue.createQueue();
+
+var job = queue.create('singleRun',{
+  source:"// extract to string\n#include <iostream>\n#include <string>\n\nint main ()\n{\n  std::string str;\n\n  std::getline (std::cin,str);\n\n  std::cout << str;\n\n  return 0;\n}\n",
+  input:["Hello World"],
+  lang:"C++"
+}).removeOnComplete(true).save( function(err,output){
+   if( !err ) console.log(output);
+});
