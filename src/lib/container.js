@@ -48,32 +48,28 @@ exports.createTemps = function(data, callback){
         }
     }
 
-    var folders = [{
-        path: "temp/" + config.dirname,
-    }, {
-        path: "temp/" + config.dirname + "/src"
-    }, {
-        path: "temp/" + config.dirname + "/src/output"
-    }, {
-        path: "temp/" + config.dirname + "/src/input"
-    }]
-
-    var files = [{
-        path: "temp/" + config.dirname + "/src/" + config.lang.fileName + config.lang.compileExt,
-        data: config.source
-    }]
-
-    for (var i = 0; i < config.data.input.length; i++) {
-        if(config.data.input[i][0] != null){
-          var inputStr = config.data.input[i].join('\n');
-
-          files.push({
-              path: "temp/" + config.dirname + "/src/input/" + i + ".txt",
-              data: inputStr
-          })
-        }
+    try {
+      //Creating a directory synchronously
+      fs.mkdirSync("temp/" + config.dirname);
+    } catch (err) {
+      console.error(err);
+      return callback(err);
     }
 
+
+    var sourceFile = {
+        path: "temp/" + config.dirname + "/" + config.lang.fileName + config.lang.compileExt,
+        data: config.source
+    }
+
+
+    fs.writeFile(sourceFile.path, sourceFile.data, 'utf8',function(err){
+      if(err) return callback(err)
+      return callback(null)
+    })
+
+
+    /*
     createDirectories(folders, function(err) {
         if (err) return callback(err);
         createFilesAsync(files, function(err) {
@@ -89,6 +85,7 @@ exports.createTemps = function(data, callback){
 
         })
     })
+    */
 
 }
 
