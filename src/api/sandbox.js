@@ -21,6 +21,7 @@ var Sandbox = {
           containerConfig.volume = "/codetree/tempDir"
           containerConfig.binds = ["/home/abdullahimahamed0987/sandbox/temp/" + containerConfig.dirname + ":/codetree/tempDir:rw"]
           containerConfig.commands = ['/bin/bash']
+          containerConfig.HostConfig.Links = ["redis:db"]
 
           dockerContainer.createContainer(containerConfig,function(err, containerId) {
               if (err) return callback(err);
