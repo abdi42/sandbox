@@ -21,7 +21,7 @@ var Sandbox = {
           containerConfig.volume = "/codetree/tempDir"
           containerConfig.binds = ["/home/abdullahimahamed0987/sandbox/temp/" + containerConfig.dirname + ":/codetree/tempDir:rw"]
           containerConfig.commands = ['/bin/bash']
-          
+
           dockerContainer.createContainer(containerConfig,function(err, containerId) {
               if (err) return callback(err);
 
@@ -78,7 +78,7 @@ var Sandbox = {
             return callback(err);
         }
         else{
-          var fileData = fs.readFileSync("temp/" + data.dirname + "/src/output/0.txt","utf8");
+          var fileData = fs.readFileSync("temp/" + data.dirname + "/0.txt","utf8");
 
           var outputArr = fileData.split("\n");
           data.output = outputArr;
