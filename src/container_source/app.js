@@ -28,15 +28,14 @@ var payload = {
 }
 console.log(payload)
 
-/*
+
 runCode(payload,function(err){
   if(err)
     return throw new Error(err);
 })
-*/
 
 function runCode(payload,done){
-  var program = new Program(payload.lang);
+  var program = new Program('tempDir',payload.lang);
 
   program.compile(function(err){
     if(err){
