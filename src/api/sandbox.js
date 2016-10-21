@@ -27,28 +27,20 @@ var Sandbox = {
 
               data.containerId = containerId;
 
-              dockerContainer.containerExec(data.containerId,['node','app.js','-i',data.input[0].join('\n'),'-l',data.lang],function(err){
-                  if(err) return callback(err)
-
-                  return callback(null,data);
-              })
+              return callback(null,data);
           })
       })
     },
     runCode:function(data,callback){
       dockerContainer.update(data,function(err){
+        if(err) return callback(err)
+
+        dockerContainer.containerExec(data.containerId,['node','app.js','-i',data.input[0].join('\n'),'-l',data.lang],function(err){
           if(err) return callback(err)
 
-          var job = queue.create('runCode', {
-            input:data.input,
-            timeout:data.timeout,
-            lang:data.lang
-          }).save();
+          return callback(null,data);
+        })
 
-          job.on('complete',function(result){
-            console.log(result)
-            return callback(null,result);
-          })
       })
     },
     checkCode:function(data,callback){
