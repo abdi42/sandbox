@@ -32,15 +32,10 @@ var Sandbox = {
       })
     },
     runCode:function(data,callback){
-      dockerContainer.update(data,function(err){
+      dockerContainer.containerExec(data.containerId,['node','app.js','-i',data.input[0].join('\n'),'-l',data.lang],function(err){
         if(err) return callback(err)
 
-        dockerContainer.containerExec(data.containerId,['node','app.js','-i',data.input[0].join('\n'),'-l',data.lang],function(err){
-          if(err) return callback(err)
-
-          return callback(null,data);
-        })
-
+        return callback(null,data);
       })
     },
     checkCode:function(data,callback){
