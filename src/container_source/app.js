@@ -5,8 +5,6 @@ var ArgumentParser = require('argparse').ArgumentParser;
 var parser = new ArgumentParser({
   version: '0.0.1',
 });
-var jsonfile = require('jsonfile')
-
 parser.addArgument(
   [ '-i', '--input' ],
   {
@@ -28,12 +26,10 @@ var payload = {
   lang:langs[args.lang]
 }
 
-jsonfile.writeFile("./data.txt", payload, function (err) {
-  console.error(err)
-})
 
 runCode(payload,function(err){
-
+  if(err)
+    console.error(err)
 })
 
 function runCode(payload,done){
@@ -44,11 +40,11 @@ function runCode(payload,done){
       done(err)
     }
     else{
-      program.singleRun(payload,function(err,output){
+      program.singleRun(payload,function(err){
         if(err){
           done(err)
         }
-        done(null,output)
+        done(null)
       })
     }
   })
