@@ -23,7 +23,7 @@ parser.addArgument(
 var args = parser.parseArgs();
 
 var payload = {
-  stdin:args.split("\n"),
+  stdin:args.input.split("\n"),
   lang:args.lang
 }
 console.log('payload')
