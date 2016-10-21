@@ -27,11 +27,13 @@ function testcasesRun(jobData,done){
 function singleRun(jobData,done){
   sandbox.create(jobData,function(err,data){
     if(err) return done(err);
+    console.log("created container")
     sandbox.runCode(data,function(err,data){
       if(err) return done(err);
+      console.log("run code")
       sandbox.getOutput(data,function(err,data){
         if(err) return done(err);
-
+        console.log('returning output ' + data)
         done(null,data.output)
       })
     })
