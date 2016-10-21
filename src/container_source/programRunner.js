@@ -33,6 +33,9 @@ var options = {}
 Program.prototype.singleRun = function(payload,callback){
   console.time("singleRun");
 
+  var lang = this.lang;
+  var path = this.path;
+
   var error = null;
   var execute = null;
   var options = {
@@ -40,9 +43,6 @@ Program.prototype.singleRun = function(payload,callback){
     input: payload.stdin.join('\n'),
     timeout:payload.timeout
   }
-
-  var lang = this.lang;
-  var path = this.path;
 
   try {
     execute = execSync(lang.execute + lang.fileName+lang.executeExt ,options)
