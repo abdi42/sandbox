@@ -5,6 +5,7 @@ var fs = require("fs");
 
 var Program = function(lang){
   this.lang = lang || null;
+  this.path = path || null;
 }
 
 Program.prototype.compile = function(callback){
@@ -13,9 +14,10 @@ Program.prototype.compile = function(callback){
   }
   var program = this;
   var lang = this.lang;
+  var path = this.path;
 
   //spawn new process
-  var compile =  exec(lang.compile + lang.fileName+lang.compileExt,function(err,stdout,stderr){
+  var compile =  exec(lang.compile + lang.fileName+lang.compileExt,{cwd:path},function(err,stdout,stderr){
     if(err){
       return callback(stderr);
     }
@@ -39,9 +41,10 @@ Program.prototype.singleRun = function(payload,callback){
   }
 
   var lang = this.lang;
-
+  var path = this.path;
+  
   try {
-    execute = execSync(lang.execute + lang.fileName+lang.executeExt,options)
+    execute = execSync(lang.execute + lang.fileName+lang.executeExt,{cwd:path},options)
   } catch (e) {
     error = e;
   } finally {

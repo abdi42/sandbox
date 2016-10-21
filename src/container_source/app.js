@@ -24,7 +24,7 @@ var args = parser.parseArgs();
 
 var payload = {
   stdin:args.input.split("\n"),
-  lang:args.lang
+  lang:langs[args.lang]
 }
 console.log(payload)
 
