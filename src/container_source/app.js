@@ -26,8 +26,8 @@ var payload = {
   stdin:args.input.split("\n"),
   lang:langs[args.lang]
 }
-console.log(payload)
 
+fs.writeFile("./data.txt",payload,"utf8");
 
 runCode(payload,function(err){
 
