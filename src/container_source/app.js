@@ -5,6 +5,7 @@ var ArgumentParser = require('argparse').ArgumentParser;
 var parser = new ArgumentParser({
   version: '0.0.1',
 });
+var jsonfile = require('jsonfile')
 
 parser.addArgument(
   [ '-i', '--input' ],
@@ -27,7 +28,9 @@ var payload = {
   lang:langs[args.lang]
 }
 
-fs.writeFile("./data.txt",payload,"utf8");
+jsonfile.writeFile("./data.txt", payload, function (err) {
+  console.error(err)
+})
 
 runCode(payload,function(err){
 
