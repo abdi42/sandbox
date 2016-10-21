@@ -3,7 +3,7 @@ var exec = require("child_process").exec;
 var execSync = require("child_process").execSync;
 var fs = require("fs");
 
-var Program = function(lang){
+var Program = function(path,lang){
   this.lang = lang || null;
   this.path = path || null;
 }
@@ -42,7 +42,7 @@ Program.prototype.singleRun = function(payload,callback){
 
   var lang = this.lang;
   var path = this.path;
-  
+
   try {
     execute = execSync(lang.execute + lang.fileName+lang.executeExt,{cwd:path},options)
   } catch (e) {
