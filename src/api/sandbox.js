@@ -29,7 +29,7 @@ var Sandbox = {
 
               data.containerId = containerId;
 
-              dockerContainer.containerExec(data.containerId,['node','app.js'],function(err){
+              dockerContainer.containerExec(data.containerId,['node','app.js','-i',data.input[0].split('\n'),'-l',data.lang],function(err){
                   if(err) return callback(err)
 
                   return callback(null,data);
