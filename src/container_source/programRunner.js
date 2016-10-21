@@ -44,7 +44,7 @@ Program.prototype.singleRun = function(payload,callback){
   var path = this.path;
 
   try {
-    execute = execSync(lang.execute + lang.fileName+lang.executeExt,{cwd:path},options)
+    execute = execSync(lang.execute + lang.fileName+lang.executeExt > path + "/0.txt",{cwd:path},options)
   } catch (e) {
     error = e;
   } finally {
