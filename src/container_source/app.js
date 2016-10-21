@@ -26,7 +26,7 @@ var payload = {
   stdin:args.input.split("\n"),
   lang:args.lang
 }
-console.log(payloads)
+console.log(payload)
 
 /*
 runCode(payload,function(err){
