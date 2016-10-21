@@ -30,8 +30,7 @@ console.log(payload)
 
 
 runCode(payload,function(err){
-  if(err)
-    return throw new Error(err);
+
 })
 
 function runCode(payload,done){
