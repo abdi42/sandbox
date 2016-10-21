@@ -36,6 +36,7 @@ Program.prototype.singleRun = function(payload,callback){
   var error = null;
   var execute = null;
   var options = {
+    cwd:path,
     input: payload.stdin.join('\n'),
     timeout:payload.timeout
   }
@@ -44,7 +45,7 @@ Program.prototype.singleRun = function(payload,callback){
   var path = this.path;
 
   try {
-    execute = execSync(lang.execute + lang.fileName+lang.executeExt ,{cwd:path},options)
+    execute = execSync(lang.execute + lang.fileName+lang.executeExt ,options)
   } catch (e) {
     error = e;
   } finally {
