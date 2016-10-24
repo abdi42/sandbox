@@ -7,7 +7,7 @@ var parser = new ArgumentParser({
 });
 var compileError = false;
 var executionError = false;
-
+console.time("runCode");
 parser.addArgument(
   [ '-i', '--input' ],
   {
@@ -33,6 +33,8 @@ var payload = {
 runCode(payload,function(err){
   if(err)
     console.error(err)
+
+  console.timeEnd("runCode");
 })
 
 function runCode(payload,done){
