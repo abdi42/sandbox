@@ -32,16 +32,26 @@ var options = {}
 
 Program.prototype.singleRun = function(payload,callback){
   console.time("singleRun");
-
+  var options = {}
   var lang = this.lang;
   var path = this.path;
 
   var error = null;
   var execute = null;
-  var options = {
-    cwd:path,
-    input: payload.stdin.join('\n'),
-    timeout:payload.timeout
+
+
+  if(payload.stdin[0].length > 0){
+    options = {
+      cwd:path,
+      input: payload.stdin.join('\n'),
+      timeout:payload.timeout
+    }
+  }
+  else {
+    options = {
+      cwd:path,
+      timeout:payload.timeout
+    }
   }
 
   try {
