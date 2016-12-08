@@ -30,6 +30,7 @@ function singleRun(jobData,done){
     if(err) return done(err);
     console.timeEnd("createContainer")
     console.time('runningCode')
+    console.log(data);
     sandbox.runCode(data,function(err,data){
       if(err) return done(err);
       console.timeEnd('runningCode')

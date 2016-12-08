@@ -19,7 +19,7 @@ var Sandbox = {
           var containerConfig = data;
           containerConfig.image = "coderunner"
           containerConfig.volume = "/codetree/tempDir"
-          containerConfig.binds = ["/home/abdullahimahamed0987/sandbox/temp/" + containerConfig.dirname + ":/codetree/tempDir:rw"]
+          containerConfig.binds = ["/home/abdullahi/sandbox/src/temp/" + containerConfig.dirname + ":/codetree/tempDir:rw"]
           containerConfig.commands = ['/bin/bash']
 
           dockerContainer.createContainer(containerConfig,function(err, containerId) {
