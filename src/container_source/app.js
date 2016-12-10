@@ -12,7 +12,7 @@ var payload = jsonfile.readFileSync('tempDir/payload.json');
   console.log(payload)
   runCode(payload,function(err){
     if(err)
-      console.error(err)
+      console.error("Error: " + err)
   })
 //}
 
