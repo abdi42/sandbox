@@ -4,6 +4,7 @@ var langs = require("./langs.js");
 var fs = require("fs")
 var cuid = require("cuid");
 var asyncUtil = require("async");
+var jsonfile = require("jsonfile");
 
 exports.createContainer = function(config,callback){
     var containerOpts = {
@@ -65,6 +66,14 @@ exports.createTemps = function(data, callback){
 
     fs.writeFile(sourceFile.path, sourceFile.data, 'utf8',function(err){
       if(err) return callback(err)
+    })
+
+    var payload = data;
+    payload.source = "";
+
+    jsonfile.writeFile("temp/" + config.dirname + "/payload.json",payload,function(err){
+      if(err) return callback(err)
+
       return callback(null)
     })
 

@@ -69,5 +69,48 @@ Program.prototype.singleRun = function(payload,callback){
 
 }
 
+Program.prototype.multiRun = function(payload,callback){
+  var program = this;
+  var lang = this.lang;
+
+  count = payload.testcases.length-1;
+
+  payload.testcases.forEach(function(testcase,index){
+    run(testcase,payload.timeout,lang,index,callback);
+  })
+
+}
+
+function run(payload,timeout,lang,index,callback){
+  var error = null;
+  var execute = null;
+
+  options = {
+    cwd:"tempDir",
+    input: payload.stdin.join('\n'),
+    timeout:timeout
+  }
+
+  try {
+    execute = execSync(lang.execute + lang.fileName+lang.executeExt,options)
+  } catch (e) {
+    error = e;
+  } finally {
+    if(error)
+      return callback(error)
+
+    next(index,callback);
+
+    var output = execute.toString("utf8")
+    fs.writeFile(path+"/"+index+".txt",output,"utf8");
+  }
+
+}
+
+function next(index,callback){
+  if(index == count){
+    return callback(null);
+  }
+}
 
 module.exports = Program;

@@ -1,41 +1,24 @@
 var Program = require("./programRunner.js");
 var langs = require("./langs.js");
 var fs = require("fs");
-var ArgumentParser = require('argparse').ArgumentParser;
-var parser = new ArgumentParser({
-  version: '0.0.1',
-});
+var jsonfile = require('jsonfile');
+
 var compileError = false;
 var executionError = false;
-console.time("runCode");
-parser.addArgument(
-  [ '-i', '--input' ],
-  {
-    help: 'program input'
-  }
-);
-
-parser.addArgument(
-  [ '-l', '--lang' ],
-  {
-    help: 'program language'
-  }
-);
 
 var args = parser.parseArgs();
 
-var payload = {
-  stdin:args.input.split("\n"),
-  lang:langs[args.lang]
+var payload = jsonfile.readFileSync('temp/payload.json');
+
+if(!payload.testcases){
+  runCode(payload,function(err){
+    if(err)
+      console.error(err)
+
+    console.timeEnd("runCode");
+  })
 }
 
-
-runCode(payload,function(err){
-  if(err)
-    console.error(err)
-
-  console.timeEnd("runCode");
-})
 
 function runCode(payload,done){
   var program = new Program('tempDir',payload.lang);

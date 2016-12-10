@@ -32,7 +32,7 @@ var Sandbox = {
       })
     },
     runCode:function(data,callback){
-      dockerContainer.containerExec(data.containerId,['node','app.js','-i',data.input[0].join('\n'),'-l',data.lang],function(err){
+      dockerContainer.containerExec(data.containerId,['node','app.js'],function(err){
         if(err) return callback(err)
 
         return callback(null,data);
