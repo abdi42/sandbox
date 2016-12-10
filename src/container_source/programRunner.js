@@ -40,10 +40,10 @@ Program.prototype.singleRun = function(payload,callback){
   var execute = null;
 
 
-  if(payload.stdin[0].length > 0){
+  if(payload.input[0].length > 0){
     options = {
       cwd:path,
-      input: payload.stdin.join('\n'),
+      input: payload.input.join('\n'),
       timeout:payload.timeout
     }
   }
@@ -87,7 +87,7 @@ function run(payload,timeout,lang,index,callback){
 
   options = {
     cwd:"tempDir",
-    input: payload.stdin.join('\n'),
+    input: payload.input.join('\n'),
     timeout:timeout
   }
 
