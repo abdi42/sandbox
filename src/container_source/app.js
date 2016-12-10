@@ -18,7 +18,7 @@ var payload = jsonfile.readFileSync('tempDir/payload.json');
 
 
 function runCode(payload,done){
-  var program = new Program('tempDir',payload.lang);
+  var program = new Program('tempDir',langs[payload.lang]);
 
   program.compile(function(err){
     if(err){
