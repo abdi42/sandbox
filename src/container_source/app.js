@@ -6,8 +6,6 @@ var jsonfile = require('jsonfile');
 var compileError = false;
 var executionError = false;
 
-var args = parser.parseArgs();
-
 var payload = jsonfile.readFileSync('temp/payload.json');
 
 if(!payload.testcases){
