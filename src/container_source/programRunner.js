@@ -39,7 +39,6 @@ Program.prototype.singleRun = function(payload,callback){
   var error = null;
   var execute = null;
 
-
   if(payload.input[0].length > 0){
     options = {
       cwd:path,
