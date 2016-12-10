@@ -6,7 +6,7 @@ var jsonfile = require('jsonfile');
 var compileError = false;
 var executionError = false;
 
-var payload = jsonfile.readFileSync('temp/payload.json');
+var payload = jsonfile.readFileSync('tempDir/payload.json');
 
 if(!payload.testcases){
   runCode(payload,function(err){
