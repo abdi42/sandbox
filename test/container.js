@@ -1,4 +1,3 @@
-var checkSingleRun = require("../middleware/checkSingleRun.js")
 var kue = require('kue');
 
 queue = kue.createQueue();
