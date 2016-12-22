@@ -22,7 +22,6 @@ var DockerApi = function(apiUrl,port){
             body:_body,
             json:true
         },function(err,response,body){
-            console.log(err,response,body)
             if(err)
                 return callback(response.statusCode + " " + body);
 

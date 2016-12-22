@@ -12,10 +12,7 @@ var job = queue.create('singleRun',{
 
 job.on('complete', function(result){
   console.log('Job finished');
-  res.json({
-    status:200,
-    result:result
-  })
+  console.log(result)
 }).on( 'error', function( err ) {
   console.log( 'Oops... ', err );
 });
