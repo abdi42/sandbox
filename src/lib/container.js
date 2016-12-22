@@ -1,5 +1,5 @@
 var docker = require("./dockerhttp.js");
-var dockerhttp = require("127.0.0.1",'4243')
+var dockerhttp = docker("127.0.0.1",'4243')
 var jsonfile = require("jsonfile");
 var langs = require("./langs.js");
 var fs = require("fs")
