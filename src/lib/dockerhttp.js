@@ -1,7 +1,7 @@
 var request = require("request");
 
 var DockerApi = function(apiUrl,port){
-  var url = "https://"+ apiUrl + ":" + port;
+  var url = "http://"+ apiUrl + ":" + port;
 
   return {
     get:function(endpoint,callback){
