@@ -1,7 +1,9 @@
 var request = require("request");
-var url = "http://127.0.0.1:4243";
 
-var DockerApi = {
+var DockerApi = function(apiUrl,port){
+  var url = apiUrl + ":" + port;
+
+  return {
     get:function(endpoint,callback){
         request({
             url:url + endpoint,
@@ -39,7 +41,9 @@ var DockerApi = {
             return callback(null,body);
         })
     }
+  }
 }
+
 
 
 module.exports = DockerApi;
