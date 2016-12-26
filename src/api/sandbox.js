@@ -7,15 +7,18 @@ var Program = require("../container_source/programRunner.js");
 var asyncUtil = require('async');
 var kue = require('kue')
   , queue = kue.createQueue();
+var langs = require("./langs.js");
 
 //Sandbox object in charge of creating,organizing,and removing containers
 var Sandbox = {
     //creating & staring docker container
     create: function(data, callback) {
+      var dirname = cuid.slug();
+
       asyncUtil.parallel({
           one: function(next) {
             //generating a random
-            data.dirname = cuid.slug();
+            data.dirname = dirname;
 
             dockerContainer.createTemps(data, function(err) {
                 if (err) return next(err)
@@ -36,11 +39,22 @@ var Sandbox = {
             })
           },
           two: function(callback) {
-              setTimeout(function() {
-                  callback(null, 2);
-              }, 100);
+            var program = new Program('/home/abdullahi/sandbox/src/temp/'+dirname,langs[data.lang]);
+            program.compile(function(err){
+              if(err){
+                fs.writeFile('/home/abdullahi/sandbox/src/temp/'+dirname+"/compileout.txt",err);
+                compileError = true;
+                return callback(err);
+              }
+              else{
+                return callback(null,"Done")
+              }
+            })
           }
       }, function(err, results) {
+          if(err)
+            console.log(err);
+
           console.log(results)
           return callback(null,results.one);
       });
