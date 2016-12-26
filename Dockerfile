@@ -4,6 +4,7 @@ FROM node
 RUN apt-get update -y
 RUN apt-get install mono-vbnc -y
 RUN echo deb http://http.debian.net/debian jessie-backports main >> /etc/apt/sources.list
+RUN apt-get update
 RUN apt-get install openjdk-8-jdk -y
 RUN update-alternatives --config java
 RUN apt-get install gcc -y
