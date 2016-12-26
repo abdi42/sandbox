@@ -11,45 +11,15 @@ var langs = require("../container_source/langs.js");
 
 //Sandbox object in charge of creating,organizing,and removing containers
 var Sandbox = {
-    //creating & staring docker container
     create: function(data, callback) {
       var dirname = cuid.slug();
-
+      data.dirname = dirname;
       asyncUtil.parallel({
           one: function(next) {
-            //generating a random
-            data.dirname = dirname;
-
-            dockerContainer.createTemps(data, function(err) {
-                if (err) return next(err)
-
-                var containerConfig = data;
-                containerConfig.image = "coderunner"
-                containerConfig.volume = "/codetree/tempDir"
-                containerConfig.binds = ["/home/abdullahi/sandbox/src/temp/" + containerConfig.dirname + ":/codetree/tempDir:rw"]
-                containerConfig.commands = ['/bin/bash']
-
-                dockerContainer.createContainer(containerConfig,function(err, containerId) {
-                    if (err) return next(err);
-
-                    data.containerId = containerId;
-
-                    return next(null,data);
-                })
-            })
+            createContainer(data,next);
           },
           two: function(callback) {
-            var program = new Program('/home/abdullahi/sandbox/src/temp/'+dirname,langs[data.lang]);
-            program.compile(function(err){
-              if(err){
-                fs.writeFile('/home/abdullahi/sandbox/src/temp/'+dirname+"/compileout.txt",err);
-                compileError = true;
-                return callback(err);
-              }
-              else{
-                return callback(null,"Done")
-              }
-            })
+            compileCode(data,next)
           }
       }, function(err, results) {
           if(err)
@@ -103,6 +73,42 @@ var Sandbox = {
       })
     }
 }
+
+//creating & staring docker container
+function createContianer(data,callback){
+  dockerContainer.createTemps(data, function(err) {
+      if (err) return next(err)
+
+      var containerConfig = data;
+      containerConfig.image = "coderunner"
+      containerConfig.volume = "/codetree/tempDir"
+      containerConfig.binds = ["/home/abdullahi/sandbox/src/temp/" + containerConfig.dirname + ":/codetree/tempDir:rw"]
+      containerConfig.commands = ['/bin/bash']
+
+      dockerContainer.createContainer(containerConfig,function(err, containerId) {
+          if (err) return next(err);
+
+          data.containerId = containerId;
+
+          return next(null,data);
+      })
+  })
+}
+
+function compileCode(data,callback){
+  var program = new Program('/home/abdullahi/sandbox/src/temp/'+dirname,langs[data.lang]);
+  program.compile(function(err){
+    if(err){
+      fs.writeFile('/home/abdullahi/sandbox/src/temp/'+dirname+"/compileout.txt",err);
+      compileError = true;
+      return callback(err);
+    }
+    else{
+      return callback(null,"Done")
+    }
+  })
+}
+
 
 function evalute(dirname,data,callback){
   codeEval.checkFiles("temp/"+dirname+"/src/output",data.expectedOutput,function(err,result){
