@@ -96,7 +96,7 @@ function createContainer(data,callback){
 }
 
 function compileCode(data,callback){
-  var program = new Program('/home/abdullahi/sandbox/src/temp/'+dirname,langs[data.lang]);
+  var program = new Program('/home/abdullahi/sandbox/src/temp/'+data.dirname,langs[data.lang]);
   program.compile(function(err){
     if(err){
       fs.writeFile('/home/abdullahi/sandbox/src/temp/'+data.dirname+"/compileout.txt",err);
