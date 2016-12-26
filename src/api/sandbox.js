@@ -3,6 +3,7 @@ var fs = require("fs");
 var codeEval = require("../lib/eval.js")
 var exec = require("child_process").exec;
 var dockerContainer = require("../lib/container.js");
+var Program = require("../container_source/programRunner.js");
 var asyncUtil = require('async');
 var kue = require('kue')
   , queue = kue.createQueue();
@@ -11,12 +12,28 @@ var kue = require('kue')
 var Sandbox = {
     //creating & staring docker container
     create: function(data, callback) {
-
       asyncUtil.parallel({
-          one: function(callback) {
-              setTimeout(function() {
-                  callback(null, 1);
-              }, 200);
+          one: function(next) {
+            //generating a random
+            data.dirname = cuid.slug();
+
+            dockerContainer.createTemps(data, function(err) {
+                if (err) return next(err)
+
+                var containerConfig = data;
+                containerConfig.image = "coderunner"
+                containerConfig.volume = "/codetree/tempDir"
+                containerConfig.binds = ["/home/abdullahi/sandbox/src/temp/" + containerConfig.dirname + ":/codetree/tempDir:rw"]
+                containerConfig.commands = ['/bin/bash']
+
+                dockerContainer.createContainer(containerConfig,function(err, containerId) {
+                    if (err) return next(err);
+
+                    data.containerId = containerId;
+
+                    return next(null,data);
+                })
+            })
           },
           two: function(callback) {
               setTimeout(function() {
@@ -24,28 +41,9 @@ var Sandbox = {
               }, 100);
           }
       }, function(err, results) {
-          console.log("DONE ASYNC")
+          console.log(results)
+          return callback(null,results.one);
       });
-      //generating a random
-      data.dirname = cuid.slug();
-
-      dockerContainer.createTemps(data, function(err) {
-          if (err) return callback(err)
-
-          var containerConfig = data;
-          containerConfig.image = "coderunner"
-          containerConfig.volume = "/codetree/tempDir"
-          containerConfig.binds = ["/home/abdullahi/sandbox/src/temp/" + containerConfig.dirname + ":/codetree/tempDir:rw"]
-          containerConfig.commands = ['/bin/bash']
-
-          dockerContainer.createContainer(containerConfig,function(err, containerId) {
-              if (err) return callback(err);
-
-              data.containerId = containerId;
-
-              return callback(null,data);
-          })
-      })
     },
     runCode:function(data,callback){
       dockerContainer.containerExec(data.containerId,['node','app.js'],function(err){
