@@ -18,7 +18,7 @@ var Sandbox = {
           one: function(next) {
             createContainer(data,next);
           },
-          two: function(callback) {
+          two: function(next) {
             compileCode(data,next)
           }
       }, function(err, results) {
