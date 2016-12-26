@@ -99,7 +99,7 @@ function compileCode(data,callback){
   var program = new Program('/home/abdullahi/sandbox/src/temp/'+dirname,langs[data.lang]);
   program.compile(function(err){
     if(err){
-      fs.writeFile('/home/abdullahi/sandbox/src/temp/'+dirname+"/compileout.txt",err);
+      fs.writeFile('/home/abdullahi/sandbox/src/temp/'+data.dirname+"/compileout.txt",err);
       compileError = true;
       return callback(err);
     }
