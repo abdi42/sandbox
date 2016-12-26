@@ -7,7 +7,7 @@ var Program = require("../container_source/programRunner.js");
 var asyncUtil = require('async');
 var kue = require('kue')
   , queue = kue.createQueue();
-var langs = require("./langs.js");
+var langs = require("../container_source/langs.js");
 
 //Sandbox object in charge of creating,organizing,and removing containers
 var Sandbox = {
