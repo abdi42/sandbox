@@ -20,37 +20,28 @@ var payload = jsonfile.readFileSync('tempDir/payload.json');
 function runCode(payload,done){
   var program = new Program('tempDir',langs[payload.lang]);
 
-  program.compile(function(err){
+  program.singleRun(payload,function(err){
     if(err){
-      fs.writeFile("tempDir/compileout.txt",err);
-      compileError = true;
-      done(err);
+      fs.writeFile("tempDir/executionError.txt",err);
+        executionError = true;
+        done(err);
+      }
+
+      var file = {
+        path:"tempDir/completed.txt",
+        data:""
+      }
+
+    if(!executionError){
+      try {
+        //Creating a file synchronously
+        fs.writeFileSync(file.path, file.data, 'utf8');
+      } catch (err) {
+        done(err)
+      }
     }
-    else{
-      program.singleRun(payload,function(err){
-        if(err){
-          fs.writeFile("tempDir/executionError.txt",err);
-          executionError = true;
-          done(err);
-        }
 
-        var file = {
-          path:"tempDir/completed.txt",
-          data:""
-        }
-
-        if(!executionError){
-          try {
-            //Creating a file synchronously
-            fs.writeFileSync(file.path, file.data, 'utf8');
-          } catch (err) {
-            done(err)
-          }
-        }
-
-        done(null);
-
-      })
-    }
+    done(null);
   })
+
 }
