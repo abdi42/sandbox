@@ -29,8 +29,10 @@ function singleRun(jobData,done){
   sandbox.create(jobData,function(err,data){
     if(err) return done(err);
     console.timeEnd("createContainer")
-    console.time('runningCode')
-    console.log(data);
+    //console.time('runningCode')
+    //console.log(data);
+
+    /*
     sandbox.runCode(data,function(err,data){
       if(err) return done(err);
       console.timeEnd('runningCode')
@@ -42,5 +44,7 @@ function singleRun(jobData,done){
         done(null,data.output)
       })
     })
+    */
+
   })
 }
