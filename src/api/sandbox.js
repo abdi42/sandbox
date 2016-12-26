@@ -3,6 +3,7 @@ var fs = require("fs");
 var codeEval = require("../lib/eval.js")
 var exec = require("child_process").exec;
 var dockerContainer = require("../lib/container.js");
+var asyncUtil = require('async');
 var kue = require('kue')
   , queue = kue.createQueue();
 
@@ -10,6 +11,21 @@ var kue = require('kue')
 var Sandbox = {
     //creating & staring docker container
     create: function(data, callback) {
+
+      asyncUtil.parallel({
+          one: function(callback) {
+              setTimeout(function() {
+                  callback(null, 1);
+              }, 200);
+          },
+          two: function(callback) {
+              setTimeout(function() {
+                  callback(null, 2);
+              }, 100);
+          }
+      }, function(err, results) {
+          console.log("DONE ASYNC")
+      });
       //generating a random
       data.dirname = cuid.slug();
 
