@@ -114,7 +114,7 @@ function evalute(dirname,data,callback){
 
 
 function checkStatus(data,callback){
-  dockerContainer.removeContainer(data);
+  //dockerContainer.removeContainer(data);
   fs.readFile("temp/"+data.dirname+"/compileout.txt","utf8", function(err,fileData) {
       if (err) {
         return;
