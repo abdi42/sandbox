@@ -15,18 +15,17 @@ var Sandbox = {
       var dirname = cuid.slug();
       data.dirname = dirname;
       asyncUtil.parallel({
-          one: function(next) {
+          createContainer: function(next) {
             createContainer(data,next);
           },
-          two: function(next) {
+          compileCode: function(next) {
             compileCode(data,next)
           }
       }, function(err, results) {
           if(err)
             console.log(err);
 
-          console.log(results)
-          return callback(null,results.one);
+          return callback(null,results.createContainer);
       });
     },
     runCode:function(data,callback){
