@@ -75,7 +75,7 @@ var Sandbox = {
 }
 
 //creating & staring docker container
-function createContianer(data,callback){
+function createContainer(data,callback){
   dockerContainer.createTemps(data, function(err) {
       if (err) return next(err)
 
