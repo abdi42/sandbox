@@ -9,7 +9,6 @@ var executionError = false;
 var payload = jsonfile.readFileSync('tempDir/payload.json');
 
 //if(!payload.testcases){
-  console.log(payload)
   runCode(payload,function(err){
     if(err)
       console.error("Error: " + err)

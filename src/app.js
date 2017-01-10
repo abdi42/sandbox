@@ -25,20 +25,12 @@ function testcasesRun(jobData,done){
 }
 
 function singleRun(jobData,done){
-  console.time('createContainer')
   sandbox.create(jobData,function(err,data){
     if(err) return done(err);
-    console.timeEnd("createContainer")
-    console.time('runningCode')
-    console.log(data);
     sandbox.runCode(data,function(err,data){
       if(err) return done(err);
-      console.timeEnd('runningCode')
-      console.time('getOutput')
       sandbox.getOutput(data,function(err,data){
         if(err) return done(err);
-        console.log('returning output ' + data)
-        console.timeEnd('getOutput')
         done(null,data.output)
       })
     })
